@@ -4,93 +4,119 @@
 *******************************************************************************;
 
 /* 
-[Dataset 1 Name] Ridership_200901_raw
+[Dataset 1 Name] Ridership_200901
 [Dataset Description] BART ridership, January 2009
-
-From here forward, template (to be changed)
-[Experimental Unit Description] California public K-12 schools in AY2014-15
-[Number of Observations] 10,393      
-[Number of Features] 28
-[Data Source] The file http://www.cde.ca.gov/ds/sd/sd/documents/frpm1415.xls
-was downloaded and edited to produce file frpm1415-edited.xls by deleting
-worksheet "Title Page", deleting row 1 from worksheet "FRPM School-Level Data",
-reformatting column headers in "FRPM School-Level Data" to remove characters
-disallowed in SAS variable names, and setting all cell values to "Text" format
-[Data Dictionary] http://www.cde.ca.gov/ds/sd/sd/fsspfrpm.asp
-[Unique ID Schema] The columns "County Code", "District Code", and "School
-Code" form a composite key, which together are equivalent to the unique id
-column CDS_CODE in dataset gradaf15, and which together are also equivalent to
-the unique id column CDS in dataset sat15.
+[Experimental Unit Description] Ridership on weekday at a BART exit station in 
+January 2009.
+[Number of Observations] 1,849      
+[Number of Features] 5
+[Data Source] The file 
+https://www.bart.gov/sites/default/files/docs/ridership_2009.zip
+was downloaded and transformed to produce file Ridership_200901_raw.csv by 
+restructuring the "Weekday OD" worksheet. Excel was used to create the new
+columns Year Month Exit Entry Riders that correspond to the Exit-Entry pairing 
+from the worksheet "Weekday OD" and converted the file into CSV.
+[Data Dictionary] https://www.bart.gov/about/reports/ridership
+[Unique ID Schema] The columns "Year", "Month", "Exit", and "Entry" form a 
+composite key, which together forms a unique id in dataset Ridership_200901. 
+Each Exit station is paired with all Entry station. The composite key is the 
+pair of Exit station and Entry station. The data set forms paired matrix of the 
+average ridership for the month. Vertical union may lead us to understand the 
+proportion use of the Entry stations compared to other Entry stations. 
+Horizontal join may lead us to understand if there exist trends over time.
 */
-%let inputDataset1DSN = frpm1415_raw;
-%let inputDataset1URL =
-https://github.com/stat697/team-0_project_repo/blob/master/data/frpm1415-edited.xls?raw=true
+%let inputDataset1DSN = Ridership_200901_raw;
+%let inputDataset1URL = 
+https://github.com/mwong70-stat660/team-4_project_repo/blob/feature/data/Ridership_200901_raw.csv
 ;
-%let inputDataset1Type = XLS;
+%let inputDataset1Type = CSV;
 
 
 /*
-[Dataset 2 Name] frpm1516
-[Dataset Description] Student Poverty Free or Reduced Price Meals (FRPM) Data,
-AY2015-16
-[Experimental Unit Description] California public K-12 schools in AY2015-16
-[Number of Observations] 10,453     
-[Number of Features] 28
-[Data Source] The file http://www.cde.ca.gov/ds/sd/sd/documents/frpm1516.xls
-was downloaded and edited to produce file frpm1516-edited.xls by deleting
-worksheet "Title Page", deleting row 1 from worksheet "FRPM School-Level Data",
-reformatting column headers in "FRPM School-Level Data" to remove characters
-disallowed in SAS variable names, and setting all cell values to "Text" format
-[Data Dictionary] http://www.cde.ca.gov/ds/sd/sd/fsspfrpm.asp
-[Unique ID Schema] The columns "County Code", "District Code", and "School
-Code" form a composite key, which together are equivalent to the unique id
-column CDS_CODE in dataset gradaf15, and which together are also equivalent to
-the unique id column CDS in dataset sat15.
+[Dataset 2 Name] Ridership_201001_raw
+[Dataset Description] BART ridership, January 2010
+[Experimental Unit Description] Ridership on weekday at a BART exit station in 
+January 2010.
+[Number of Observations] 2,500
+[Number of Features] 5
+[Data Source] The file 
+https://www.bart.gov/sites/default/files/docs/ridership_2010.zip
+was downloaded and transformed to produce file Ridership_200901_raw.csv by 
+restructuring the "Weekday OD" worksheet. Excel was used to create the new
+columns Year Month Exit Entry Riders that correspond to the Exit-Entry pairing 
+from the worksheet "Weekday OD" and converted the file into CSV.
+[Data Dictionary] https://www.bart.gov/about/reports/ridership
+[Unique ID Schema] The columns "Year", "Month", "Exit", and "Entry" form a 
+composite key, which together forms a unique id in dataset Ridership_200901. 
+Each Exit station is paired with all Entry station. The composite key is the 
+pair of Exit station and Entry station. The data set forms paired matrix of the 
+average ridership for the month. Vertical union may lead us to understand the 
+proportion use of the Entry stations compared to other Entry stations. 
+Horizontal join may lead us to understand if there exist trends over time.
 */
-%let inputDataset2DSN = frpm1516_raw;
+%let inputDataset2DSN = Ridership_201001_raw;
 %let inputDataset2URL =
-https://github.com/stat697/team-0_project_repo/blob/master/data/frpm1516-edited.xls?raw=true
+https://github.com/mwong70-stat660/team-4_project_repo/blob/feature/data/Ridership_201001_raw.csv
 ;
-%let inputDataset2Type = XLS;
+%let inputDataset2Type = CSV;
 
 
 /*
-[Dataset 3 Name] gradaf15
-[Dataset Description] Graduates Meeting UC/CSU Entrance Requirements, AY2014-15
-[Experimental Unit Description] California public K-12 schools in AY2014-15
-[Number of Observations] 2,490
-[Number of Features] 15
-[Data Source] The file
-http://dq.cde.ca.gov/dataquest/dlfile/dlfile.aspx?cLevel=School&cYear=2014-15&cCat=UCGradEth&cPage=filesgradaf.asp
-was downloaded and edited to produce file gradaf15.xls by importing into Excel
-and setting all cell values to "Text" format
-[Data Dictionary] http://www.cde.ca.gov/ds/sd/sd/fsgradaf09.asp
-[Unique ID Schema] The column CDS_CODE is a unique id.
+[Dataset 3 Name] Ridership_202001_raw
+[Dataset Description] BART ridership, January 2020
+[Experimental Unit Description] Ridership on weekday at a BART exit station in 
+January 2020.
+[Number of Observations] 1,849      
+[Number of Features] 5
+[Data Source] The file 
+http://64.111.127.166/ridership/Ridership_202001.xlsx
+was downloaded and transformed to produce file Ridership_200901_raw.csv by 
+restructuring the "Avg Weekday OD" worksheet. Excel was used to create the new
+columns Year Month Exit Entry Riders that correspond to the Exit-Entry pairing 
+from the worksheet "Weekday OD" and converted the file into CSV.
+[Data Dictionary] https://www.bart.gov/about/reports/ridership
+[Unique ID Schema] The columns "Year", "Month", "Exit", and "Entry" form a 
+composite key, which together forms a unique id in dataset Ridership_200901. 
+Each Exit station is paired with all Entry station. The composite key is the 
+pair of Exit station and Entry station. The data set forms paired matrix of the 
+average ridership for the month. Vertical union may lead us to understand the 
+proportion use of the Entry stations compared to other Entry stations. 
+Horizontal join may lead us to understand if there exist trends over time.
 */
-%let inputDataset3DSN = gradaf15_raw;
+%let inputDataset3DSN = Ridership_202001_raw;
 %let inputDataset3URL =
-https://github.com/stat697/team-0_project_repo/blob/master/data/gradaf15.xls?raw=true
+https://github.com/mwong70-stat660/team-4_project_repo/blob/feature/data/Ridership_202001_raw.csv
 ;
 %let inputDataset3Type = XLS;
 
 
 /*
-[Dataset 4 Name] sat15
-[Dataset Description] SAT Test Results, AY2014-15
-[Experimental Unit Description] California public K-12 schools in AY2014-15
-[Number of Observations] 2,331
-[Number of Features] 12
-[Data Source]  The file http://www3.cde.ca.gov/researchfiles/satactap/sat15.xls
-was downloaded and edited to produce file sat15-edited.xls by opening in Excel
-and setting all cell values to "Text" format
-[Data Dictionary] http://www.cde.ca.gov/ds/sp/ai/reclayoutsat.asp
-[Unique ID Schema] The column CDS is a unique id.
+[Dataset 4 Name] Ridership_202101
+[Dataset Description] BART ridership, January 2021
+[Experimental Unit Description] Ridership on weekday at a BART exit station in 
+January 2021.
+[Number of Observations] 2,500      
+[Number of Features] 5
+[Data Source] The file 
+http://64.111.127.166/ridership/Ridership_202101.xlsx
+was downloaded and transformed to produce file Ridership_200901_raw.csv by 
+restructuring the "Avg Weekday OD" worksheet. Excel was used to create the new
+columns Year Month Exit Entry Riders that correspond to the Exit-Entry pairing 
+from the worksheet "Weekday OD" and converted the file into CSV.
+[Data Dictionary] https://www.bart.gov/about/reports/ridership
+[Unique ID Schema] The columns "Year", "Month", "Exit", and "Entry" form a 
+composite key, which together forms a unique id in dataset Ridership_200901. 
+Each Exit station is paired with all Entry station. The composite key is the 
+pair of Exit station and Entry station. The data set forms paired matrix of the 
+average ridership for the month. Vertical union may lead us to understand the 
+proportion use of the Entry stations compared to other Entry stations. 
+Horizontal join may lead us to understand if there exist trends over time.
 */
-%let inputDataset4DSN = sat15_raw;
+%let inputDataset4DSN = Ridership_202101_raw;
 %let inputDataset4URL =
-https://github.com/stat697/team-0_project_repo/blob/master/data/sat15-edited.xls?raw=true
+https://github.com/mwong70-stat660/team-4_project_repo/blob/feature/data/Ridership_202101_raw.csv
 ;
-%let inputDataset4Type = XLS;
+%let inputDataset4Type = CSV;
 
 
 /* load raw datasets over the wire, if they doesn't already exist */
@@ -136,26 +162,6 @@ https://github.com/stat697/team-0_project_repo/blob/master/data/sat15-edited.xls
     %end;
 %mend;
 %loadDatasets
-
-/*
-Note to learners [which is not part of this example/template]: The example below
-illustrates how much work SAS does behind the scenes when a new dataset is
-created. By default, SAS datasets are stored on disk as physical files, which
-you could view by locating in folders called "libraries," with the default
-"Work" library located in a temporary location typically not accessible to the
-end user. In addition, SAS dataset files can be optimized in numerous ways,
-including encryption, compression, and indexing. This reflects SAS having been
-created in the 1960s, when computer resources were extremely limited, and so it
-made sense to store even small datasets on disk and load them into memory one
-record/row at a time, as needed.
-By contract, most modern languages, like R and Python, store datasets in memory
-by default. This has several trade-offs: Since DataFrames in R and Python are in
-memory, any of their elements can be accessed simultaneously, making data
-transformations fast and flexible, but DataFrames cannot be larger than
-available system memory. On the other hand, SAS datasets can be arbitrarily
-large, but large datasets often take longer to process since they must be
-streamed to memory from disk and then operated on one record at a time.
-*/
 
 /*
 print the names of all datasets/tables created above by querying the
