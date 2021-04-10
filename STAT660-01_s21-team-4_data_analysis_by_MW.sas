@@ -7,7 +7,7 @@
 create macro variable with path to directory where this file is located,
 enabling relative imports
 */
-%let path=%sysfunc(tranwrd(%sysget(SAS_EXECFILEPATH),%sysget(SAS_EXECFILENAME),));
+%let path=C:/Users/m2/STAT660/team-4_project_repo;
 
 /*
 execute data-prep file, which will generate final analytic dataset used to
