@@ -7,7 +7,7 @@
 create macro variable with path to directory where this file is located,
 enabling relative imports
 */
-%let path=C:/Users/m2/STAT660/team-4_project_repo;
+%let path=%sysfunc(tranwrd(%sysget(SAS_EXECFILEPATH),%sysget(SAS_EXECFILENAME),));
 
 /*
 execute data-prep file, which will generate final analytic dataset used to
@@ -27,7 +27,36 @@ Rationale: We are interested in the data exploration process.
 
 Note: This compares the column "Riders" from Ridership_202001_raw and take the
 largest values.
+
+Limitations: How to find the max(5) values for the paired entry and exit? 
+Perhaps we need to combine the total entry and total exit to answer, or if not
+we will need to refine what constitutes of being the "busiest" station.
 */
+proc sort
+		data=Ridership_200901
+		out=Ridership_200901;
+	by Exit descending Riders_200901;
+run;
+
+proc print 
+        data=Ridership_200901(obs=5);
+	var Entry Exit Riders_200901;
+	title '2009 Jan Ridership';
+	title2 "5 most utlized stations for Entry";
+run;
+
+proc sort
+		data=Ridership_200901
+		out=Ridership_200901;
+	by Entry descending Riders_200901;
+run;
+
+proc print 
+        data=Ridership_200901(obs=5);
+	var Entry Exit Riders_200901;
+	title '2009 Jan Ridership';
+	title2 "5 most utlized stations for Exit";
+run;
 
 
 *******************************************************************************;
@@ -41,7 +70,8 @@ Rationale: Of the top Exit stations in San Francisco, we identify the Entry
 stations with the largest values. This may point out where San Francisco 
 workers commute from.
 
-Note: This compares the top feeders.
+Note: We need to add the total of Riders_200901 given a defined Entry and Exit.
+We might need to create an iterative function or use DO LOOP Statement.
 */
 
 
@@ -55,7 +85,13 @@ Rationale: This would help inform whether essential workers are concentrated in
 certain areas of living and work.
 
 Note: This compares the Exit column total from Ridership_202001 to the Exit 
-column total from Ridership_202101.
+column total from Ridership_202101. We will need to join two datasets and since
+the data-preparation file restructured the columns Riders_200901, Riders2010,
+Riders_202001, and (soon) Riders_202101, we will take a closer look at the 
+changes in the most used Exit.
+
+Limitations: We assume that the Average Weekday Ridership as described by 
+Ridership_202101 and Exit are associated with where essential workers work.
 */
 
 
@@ -68,6 +104,10 @@ during the H1N1 outbreak in 2010?
 
 Rationale: This would require proportion comparisons.
 
-Note: We would assume a linear model between Ridership_January2009 and 
-Ridership_202001, and compare the predicted mean to Ridership_January2010.
+Note: We would assume a linear model between Riders_200901 and Riders_202001, 
+and compare the predicted mean to Riders_201001. 
+
+Limitations: We assume of normal distribution and a positively increasing slope 
+between Riders_200901 and Riders_202001. We will likely to choose a selected 
+number of Exit for means comparison. 
 */
