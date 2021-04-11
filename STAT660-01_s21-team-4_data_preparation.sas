@@ -5,18 +5,25 @@
 
 /* 
 [Dataset 1 Name] Ridership_200901
+
 [Dataset Description] BART ridership, January 2009
+
 [Experimental Unit Description] Ridership on weekday at a BART exit station in 
 January 2009.
-[Number of Observations] 1,849      
+
+[Number of Observations] 1,849   
+
 [Number of Features] 5
+
 [Data Source] The file 
 https://www.bart.gov/sites/default/files/docs/ridership_2009.zip
 was downloaded and transformed to produce file Ridership_200901_raw.csv by 
 restructuring the "Weekday OD" worksheet. Excel was used to create the new
 columns Year Month Exit Entry Riders that correspond to the Exit-Entry pairing 
 from the worksheet "Weekday OD" and converted the file into CSV.
+
 [Data Dictionary] https://www.bart.gov/about/reports/ridership
+
 [Unique ID Schema] The columns "Year", "Month", "Exit", and "Entry" form a 
 composite key, which together forms a unique id in dataset Ridership_200901. 
 Each Exit station is paired with all Entry station. The composite key is the 
@@ -34,18 +41,25 @@ https://github.com/mwong70-stat660/team-4_project_repo/blob/feature/data/Ridersh
 
 /*
 [Dataset 2 Name] Ridership_201001_raw
+
 [Dataset Description] BART ridership, January 2010
+
 [Experimental Unit Description] Ridership on weekday at a BART exit station in 
 January 2010.
+
 [Number of Observations] 2,500
+
 [Number of Features] 5
+
 [Data Source] The file 
 https://www.bart.gov/sites/default/files/docs/ridership_2010.zip
 was downloaded and transformed to produce file Ridership_200901_raw.csv by 
 restructuring the "Weekday OD" worksheet. Excel was used to create the new
 columns Year Month Exit Entry Riders that correspond to the Exit-Entry pairing 
 from the worksheet "Weekday OD" and converted the file into CSV.
+
 [Data Dictionary] https://www.bart.gov/about/reports/ridership
+
 [Unique ID Schema] The columns "Year", "Month", "Exit", and "Entry" form a 
 composite key, which together forms a unique id in dataset Ridership_200901. 
 Each Exit station is paired with all Entry station. The composite key is the 
@@ -63,18 +77,25 @@ https://github.com/mwong70-stat660/team-4_project_repo/blob/feature/data/Ridersh
 
 /*
 [Dataset 3 Name] Ridership_202001_raw
+
 [Dataset Description] BART ridership, January 2020
+
 [Experimental Unit Description] Ridership on weekday at a BART exit station in 
 January 2020.
-[Number of Observations] 1,849      
+
+[Number of Observations] 1,849   
+
 [Number of Features] 5
+
 [Data Source] The file 
 http://64.111.127.166/ridership/Ridership_202001.xlsx
 was downloaded and transformed to produce file Ridership_200901_raw.csv by 
 restructuring the "Avg Weekday OD" worksheet. Excel was used to create the new
 columns Year Month Exit Entry Riders that correspond to the Exit-Entry pairing 
 from the worksheet "Weekday OD" and converted the file into CSV.
+
 [Data Dictionary] https://www.bart.gov/about/reports/ridership
+
 [Unique ID Schema] The columns "Year", "Month", "Exit", and "Entry" form a 
 composite key, which together forms a unique id in dataset Ridership_200901. 
 Each Exit station is paired with all Entry station. The composite key is the 
@@ -92,18 +113,25 @@ https://github.com/mwong70-stat660/team-4_project_repo/blob/feature/data/Ridersh
 
 /*
 [Dataset 4 Name] Ridership_202101
+
 [Dataset Description] BART ridership, January 2021
+
 [Experimental Unit Description] Ridership on weekday at a BART exit station in 
 January 2021.
-[Number of Observations] 2,500      
+
+[Number of Observations] 2,500   
+
 [Number of Features] 5
+
 [Data Source] The file 
 http://64.111.127.166/ridership/Ridership_202101.xlsx
 was downloaded and transformed to produce file Ridership_200901_raw.csv by 
 restructuring the "Avg Weekday OD" worksheet. Excel was used to create the new
 columns Year Month Exit Entry Riders that correspond to the Exit-Entry pairing 
 from the worksheet "Weekday OD" and converted the file into CSV.
+
 [Data Dictionary] https://www.bart.gov/about/reports/ridership
+
 [Unique ID Schema] The columns "Year", "Month", "Exit", and "Entry" form a 
 composite key, which together forms a unique id in dataset Ridership_200901. 
 Each Exit station is paired with all Entry station. The composite key is the 
