@@ -108,47 +108,6 @@ proc means
 run;
 title;
 
-/*
-Most utilized stations based on Entry
-*/
-proc sort
-	    data=Ridership_200901_clean
-	    out=Ridership_200901_sorted
-    ;
-	by 
-        
-    descending 
-        Riders
-    ;
-run;
-
-title "2009 Jan Ridership";
-title2 "5 Most utilized stations for Entry";
-proc print 
-        data=Ridership_200901_sorted(obs=5)
-	;
-	var
-        Entry
-        Exit
-        Riders
-    ;
-run;
-title;
-title2;
-
-proc sort
-		data=Ridership_200901
-		out=Ridership_200901;
-	by Entry descending Riders_200901;
-run;
-
-proc print 
-        data=Ridership_200901(obs=5);
-	var Entry Exit Riders_200901;
-	title '2009 Jan Ridership';
-	title2 "5 most utlized stations for Exit";
-run;
-
 
 *******************************************************************************;
 * Research Question 2 Analysis Starting Point;
@@ -163,6 +122,10 @@ workers commute from.
 
 Note: We need to add the total of Riders_200901 given a defined Entry and Exit.
 We might need to create an iterative function or use DO LOOP Statement.
+
+Limitations: We assume that the library data from the BART is accurate and 
+unchanged. Thus, we confirm with other sources about which stations are located
+in the San Francisco's Financial District to create a variable for validation.
 */
 
 
