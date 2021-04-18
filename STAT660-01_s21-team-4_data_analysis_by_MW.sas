@@ -32,18 +32,109 @@ Limitations: How to find the max(5) values for the paired entry and exit?
 Perhaps we need to combine the total entry and total exit to answer, or if not
 we will need to refine what constitutes of being the "busiest" station.
 */
+title "Inspect Riders from Ridership_200901_clean";
+proc means
+        data=Ridership_200901_clean
+		maxdec=1
+		missing
+		n
+		nmiss
+		min q1 median q3 max
+		mean std
+	;
+	var
+	    Riders
+	;
+	label
+	    Ride0901=" "
+	;
+run;
+title;
+
+title "Inspect Riders from Ridership_201001_clean";
+proc means
+        data=Ridership_201001_clean
+		maxdec=1
+		missing
+		n
+		nmiss
+		min q1 median q3 max
+		mean std
+	;
+	var
+	    Riders
+	;
+	label
+	    Ride1001=" "
+	;
+run;
+title;
+
+title "Inspect Riders from Ridership_202001_clean";
+proc means
+        data=Ridership_202001_clean
+		maxdec=1
+		missing
+		n
+		nmiss
+		min q1 median q3 max
+		mean std
+	;
+	var
+	    Riders
+	;
+	label
+	    Ride2001
+	;
+run;
+title;
+
+title "Inspect Riders from Ridership_202101_clean";
+proc means
+        data=Ridership_202101_clean
+		maxdec=1
+		missing
+		n
+		nmiss
+		min q1 median q3 max
+		mean std
+	;
+	var
+	    Riders
+	;
+	label
+	    Ride2101
+	;
+run;
+title;
+
+/*
+Most utilized stations based on Entry
+*/
 proc sort
-		data=Ridership_200901
-		out=Ridership_200901;
-	by Exit descending Riders_200901;
+	    data=Ridership_200901_clean
+	    out=Ridership_200901_sorted
+    ;
+	by 
+        
+    descending 
+        Riders
+    ;
 run;
 
+title "2009 Jan Ridership";
+title2 "5 Most utilized stations for Entry";
 proc print 
-        data=Ridership_200901(obs=5);
-	var Entry Exit Riders_200901;
-	title '2009 Jan Ridership';
-	title2 "5 most utlized stations for Entry";
+        data=Ridership_200901_sorted(obs=5)
+	;
+	var
+        Entry
+        Exit
+        Riders
+    ;
 run;
+title;
+title2;
 
 proc sort
 		data=Ridership_200901
