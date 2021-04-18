@@ -201,3 +201,225 @@ proc sql;
     where libname = 'WORK'
     order by memname;
 quit;
+
+
+/*
+MW's import data fix
+proc import datafile="C:\Users\STSC\Dropbox\STA660 Adv SAS\team-4_project_repo\data\Ridership_200901_raw.csv"
+	out=WORK.Ridership_200901_raw
+    dbms=csv
+	replace;
+	getnames=yes;
+run;
+
+proc import datafile="C:\Users\STSC\Dropbox\STA660 Adv SAS\team-4_project_repo\data\Ridership_201001_raw.csv"
+	out=WORK.Ridership_201001_raw
+    dbms=csv
+	replace;
+	getnames=yes;
+run;
+
+proc import datafile="C:\Users\STSC\Dropbox\STA660 Adv SAS\team-4_project_repo\data\Ridership_202001_raw.csv"
+	out=WORK.Ridership_202001_raw
+    dbms=csv
+	replace;
+	getnames=yes;
+run;
+
+proc import datafile="C:\Users\STSC\Dropbox\STA660 Adv SAS\team-4_project_repo\data\Ridership_202101_raw.csv"
+	out=WORK.Ridership_202101_raw
+    dbms=csv
+	replace;
+	getnames=yes;
+run;
+*/
+
+
+/*
+For Ridership_200901_raw, the columns Year, Month, Entry, and Exit are intended 
+to form a composite key, so any rows corresponding to multiple values should be 
+removed. In addition, rows should be removed if they (a) are missing values for
+any of the composite key columns or (b) have a Ridership<1. The variable Riders 
+consists of the Average Weekday ridership.
+
+After running the proc sort step below, the new dataset Ridership_200901_clean
+will have no duplicate. The unique id will correspond to our experimental units 
+of interest, the paired Entry and Exit. Combined with the columns Year and 
+Month, the columns Entry and Exit will form a composite key. This means each 
+columns in Ridership_200901_clean are guaranteed to form a composite key.
+
+We added the column Riders_200901 from Riders and dropped the columns Year,
+Month, and Riders in the subsequent DATA Step. Thus, we created Riders_200901.
+removed the columns Year and Month and created Ridership_200901.
+*/
+proc sort 
+        nodupkey
+		data=Ridership_200901_raw
+		dupout=Ridership_200901_raw_dups
+		out=Ridership_200901_clean;
+	;
+	where
+        /* remove rows with missing composite key components */
+	    not(missing(Year))
+		and
+		not(missing(Month))
+		and
+		not(missing(Entry))
+		and
+		not(missing(Exit))
+		and
+        /* remove rows with Riders<1*/
+		not(Riders < 1)
+	;
+	by 
+        Entry
+        Exit 
+		Riders
+;
+run;
+
+data Ridership_200901;
+    set Ridership_200901_clean;
+	Entry=Entry;
+	Exit=Exit;
+	Riders_200901=Riders;
+	drop Year Month Riders;
+run;
+   
+
+/*
+For Ridership_201001_raw, the columns Year, Month, Entry, and Exit are intended 
+to form a composite key, so any rows corresponding to multiple values should be 
+removed. In addition, rows should be removed if they (a) are missing values for
+any of the composite key columns or (b) have a Ridership<1. The variable Riders 
+consists of the Average Weekday ridership.
+
+After running the proc sort step below, the new dataset Ridership_201001_clean
+will have no duplicate. The unique id will correspond to our experimental units 
+of interest, the paired Entry and Exit. Combined with the columns Year and 
+Month, the columns Entry and Exit will form a composite key. This means each 
+columns in Ridership_201001_clean are guaranteed to form a composite key.
+
+We added the column Riders_201001 from Riders and dropped the columns Year,
+Month, and Riders in the subsequent DATA Step. Thus, we created Riders_200901.
+removed the columns Year and Month and created Ridership_201001.
+*/
+proc sort 
+        nodupkey
+		data=Ridership_201001_raw
+		dupout=Ridership_201001_raw_dups
+		out=Ridership_201001_clean;
+	;
+	where
+        /* remove rows with missing composite key components */
+	    not(missing(Year))
+		and
+		not(missing(Month))
+		and
+		not(missing(Entry))
+		and
+		not(missing(Exit))
+		and
+        /* remove rows with Riders<1*/
+		not(Riders < 1)
+	;
+	by 
+        Entry
+        Exit 
+		Riders
+;
+run;
+
+data Ridership_201001;
+    set Ridership_201001_clean;
+	Entry=Entry;
+	Exit=Exit;
+	Riders_201001=Riders;
+	drop Year Month Riders;
+run;
+    
+title "2010 Jan Ridership";
+proc print 
+        data=Ridership_201001(obs=6);
+run;
+title;
+
+
+/*
+For Ridership_202001_raw, the columns Year, Month, Entry, and Exit are intended 
+to form a composite key, so any rows corresponding to multiple values should be 
+removed. In addition, rows should be removed if they (a) are missing values for
+any of the composite key columns or (b) have a Ridership<1. The variable Riders 
+consists of the Average Weekday ridership.
+
+After running the proc sort step below, the new dataset Ridership_202001_clean
+will have no duplicate. The unique id will correspond to our experimental units 
+of interest, the paired Entry and Exit. Combined with the columns Year and 
+Month, the columns Entry and Exit will form a composite key. This means each 
+columns in Ridership_202001_clean are guaranteed to form a composite key.
+
+We added the column Riders_202001 from Riders and dropped the columns Year,
+Month, and Riders in the subsequent DATA Step. Thus, we created Riders_202001.
+removed the columns Year and Month and created Ridership_202001.
+*/
+proc sort 
+        nodupkey
+		data=Ridership_202001_raw
+		dupout=Ridership_202001_raw_dups
+		out=Ridership_202001_clean;
+	;
+	where
+        /* remove rows with missing composite key components */
+	    not(missing(Year))
+		and
+		not(missing(Month))
+		and
+		not(missing(Entry))
+		and
+		not(missing(Exit))
+		and
+        /* remove rows with Riders<1*/
+		not(Riders < 1)
+	;
+	by 
+        Entry
+        Exit 
+		Riders
+;
+run;
+
+data Ridership_202001;
+    set Ridership_202001_clean;
+	Entry=Entry;
+	Exit=Exit;
+	Riders_202001=Riders;
+	drop Year Month Riders;
+run;
+    
+title "2020 Jan Ridership";
+proc print 
+        data=Ridership_202001(obs=6);
+run;
+title;
+
+
+/*
+* example PROC SQL;
+proc sql;
+    create table sql_Ridership_200901 as
+	    select
+		     Exit
+			,Entry
+			,Riders_200901
+			,count(*) as row_count_for_unique_id_value
+		from
+		    Ridership_200901_raw
+		group by
+		     Exit
+			,Entry
+			,Riders_200901
+		having
+		    row_count_for_unique_id_value > 1
+;
+quit;
+*/
