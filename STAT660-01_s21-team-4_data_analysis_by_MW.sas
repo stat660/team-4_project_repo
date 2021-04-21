@@ -35,76 +35,76 @@ we will need to refine what constitutes of being the "busiest" station.
 title "Inspect Riders from Ridership_200901_clean";
 proc means
         data=Ridership_200901_clean
-		maxdec=1
-		missing
-		n
-		nmiss
-		min q1 median q3 max
-		mean std
-	;
-	var
-	    Riders
-	;
-	label
-	    Ride0901=" "
-	;
+        maxdec=1
+        missing
+        n
+        nmiss
+        min q1 median q3 max
+        mean std
+    ;
+    var
+        Riders
+    ;
+    label
+        Ride0901=" "
+    ;
 run;
 title;
 
 title "Inspect Riders from Ridership_201001_clean";
 proc means
         data=Ridership_201001_clean
-		maxdec=1
-		missing
-		n
-		nmiss
-		min q1 median q3 max
-		mean std
-	;
-	var
-	    Riders
-	;
-	label
-	    Ride1001=" "
-	;
+        maxdec=1
+        missing
+        n
+        nmiss
+        min q1 median q3 max
+        mean std
+    ;
+    var
+        Riders
+    ;
+    label
+        Ride1001=" "
+    ;
 run;
 title;
 
 title "Inspect Riders from Ridership_202001_clean";
 proc means
         data=Ridership_202001_clean
-		maxdec=1
-		missing
-		n
-		nmiss
-		min q1 median q3 max
-		mean std
-	;
-	var
-	    Riders
-	;
-	label
-	    Ride2001
-	;
+        maxdec=1
+        missing
+        n
+        nmiss
+        min q1 median q3 max
+        mean std
+    ;
+    var
+        Riders
+    ;
+    label
+        Ride2001
+    ;
 run;
 title;
 
 title "Inspect Riders from Ridership_202101_clean";
 proc means
         data=Ridership_202101_clean
-		maxdec=1
-		missing
-		n
-		nmiss
-		min q1 median q3 max
-		mean std
-	;
-	var
-	    Riders
-	;
-	label
-	    Ride2101
-	;
+        maxdec=1
+        missing
+        n
+        nmiss
+        min q1 median q3 max
+        mean std
+    ;
+    var
+        Riders
+    ;
+    label
+        Ride2101
+    ;
 run;
 title;
 
@@ -128,7 +128,10 @@ unchanged. Thus, we confirm with other sources about which stations are located
 in the San Francisco's Financial District to create a variable for validation.
 */
 
+*We identified the Exit=EM MT are stations are in the Financial District in SF;
+/*FinDist. Now, we want to create ...*/
 
+ 
 *******************************************************************************;
 * Research Question 3 Analysis Starting Point;
 *******************************************************************************;
@@ -148,6 +151,19 @@ Limitations: We assume that the Average Weekday Ridership as described by
 Ridership_202101 and Exit are associated with where essential workers work.
 */
 
+* EM and MT are near transportation hubs(?)
+  CC is near government offices.
+  16 and 24 are near hospitals. 
+EM 
+MT
+PL
+CC
+16
+24
+
+Find the highest value for Riders for these Exits;
+
+
 
 *******************************************************************************;
 * Research Question 4 Analysis Starting Point;
@@ -165,3 +181,5 @@ Limitations: We assume of normal distribution and a positively increasing slope
 between Riders_200901 and Riders_202001. We will likely to choose a selected 
 number of Exit for means comparison. 
 */
+
+* Horizontal join the tables. Take the sum of Riders based on Exit name. ;
