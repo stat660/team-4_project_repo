@@ -301,7 +301,7 @@ proc sort
 		and
 		not(missing(Exit))
 		and
-        /* remove rows with Riders<1*/
+        /* remove rows with missing Riders*/
 		not(missing(Riders))
 	;
 	by 
@@ -341,7 +341,7 @@ proc sort
 		and
 		not(missing(Exit))
 		and
-        /* remove rows with Riders<1*/
+        /* remove rows with missing Riders*/
 		not(missing(Riders))
 	;
 	by 
