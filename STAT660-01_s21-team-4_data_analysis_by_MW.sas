@@ -84,7 +84,7 @@ proc means
         Riders
     ;
     label
-        Ride2001
+        Ride2001=" "
     ;
 run;
 title;
@@ -103,11 +103,10 @@ proc means
         Riders
     ;
     label
-        Ride2101
+        Ride2101=" "
     ;
 run;
 title;
-
 
 *******************************************************************************;
 * Research Question 2 Analysis Starting Point;
@@ -128,10 +127,39 @@ unchanged. Thus, we confirm with other sources about which stations are located
 in the San Francisco's Financial District to create a variable for validation.
 */
 
-*We identified the Exit=EM MT are stations are in the Financial District in SF;
-/*FinDist. Now, we want to create ...*/
+/* 
+Using Google Maps and the City Supervisory Map (cited on 04/22/2021), 
+https://sfplanninggis.org/sffind/
+, Exit=EM MT are located in the Financial District, Region="SF_Dist3" 
+*/
+data work.SF_Dist3;
+    set Ridership_202101_clean;
+    if 
+        Exit="EM" then Region="SF_Dist3";
+    else if
+        Exit="MT" then Region="SF_Dist3";
+    else Region=" ";
+    keep 
+        Entry
+        Exit
+        Riders
+        Region;
+run;
 
- 
+proc sort
+        data=SF_Dist3
+        out=work.temp
+        ;
+    where
+        Region="SF_Dist3"
+    ;
+    by
+        Riders
+        Exit
+    ;
+run;
+
+
 *******************************************************************************;
 * Research Question 3 Analysis Starting Point;
 *******************************************************************************;
@@ -151,18 +179,49 @@ Limitations: We assume that the Average Weekday Ridership as described by
 Ridership_202101 and Exit are associated with where essential workers work.
 */
 
-* EM and MT are near transportation hubs(?)
-  CC is near government offices.
-  16 and 24 are near hospitals. 
-EM 
-MT
-PL
-CC
-16
-24
+* Our alternate hypothesis claims that Exit=EM MT PL CC 16 24 in 2021 have
+  a higher means compared to the population means. EM and MT are near a
+  transbay transportation hubs, CC is near government offices. 16 and 24 
+  are near hospitals. PL and CC are "maybe's" due to its proximity to
+  busy buildings. First, we will identify the ones that are essential. 
 
-Find the highest value for Riders for these Exits;
+First, we identify the Exit that stayed busy in 2021 starting from those
+listed above;
 
+data work.Workplace;
+    set Ridership_202101_clean;
+    if 
+        Exit="16" then Essential="1";
+    else if
+        Exit="24" then Essential="1";
+    else if
+        Exit="EM" then Essential="1";
+    else if
+        Exit="MT" then Essential="1";
+    else if
+        Exit="PL" then Essential="1";
+    else if
+        Exit="CC" then Essential="1";
+    else Essential="0";
+    keep 
+        Entry
+        Exit
+        Riders
+        Essential;
+run;
+
+proc sort
+        data=Workplace
+        out=work.temp
+        ;
+    where
+        Essential="1"
+    ;
+    by
+        Riders
+        Exit
+    ;
+run;
 
 
 *******************************************************************************;
@@ -182,4 +241,26 @@ between Riders_200901 and Riders_202001. We will likely to choose a selected
 number of Exit for means comparison. 
 */
 
-* Horizontal join the tables. Take the sum of Riders based on Exit name. ;
+/* 
+In data-analysis, we would add match-merge to horizontally join the tables. 
+Then, we can take the sum of Riders based on Exit name to compare the means. 
+Here's the means step for a general overview if there is difference in data
+summary between 2009 and 2010.
+*/
+proc means
+        data=Ridership_200901_clean
+        n mean std max
+    ;
+    var
+        Riders
+    ;
+run;
+
+proc means
+        data=Ridership_201001_clean
+        n mean std max
+    ;
+    var
+        Riders
+    ;
+run;
