@@ -32,28 +32,10 @@ Limitations: How to find the max(5) values for the paired entry and exit?
 Perhaps we need to combine the total entry and total exit to answer, or if not
 we will need to refine what constitutes of being the "busiest" station.
 */
-title "Inspect Riders from Ridership_200901_clean";
-proc means
-        data=Ridership_200901_clean
-        maxdec=1
-        missing
-        n
-        nmiss
-        min q1 median q3 max
-        mean std
-    ;
-    var
-        Riders
-    ;
-    label
-        Ride0901=" "
-    ;
-run;
-title;
 
-title "Inspect Riders from Ridership_201001_clean";
+title "Inspect Riders from Match-Merged";
 proc means
-        data=Ridership_201001_clean
+        data=Ridership_merged
         maxdec=1
         missing
         n
@@ -62,48 +44,10 @@ proc means
         mean std
     ;
     var
-        Riders
-    ;
-    label
-        Ride1001=" "
-    ;
-run;
-title;
-
-title "Inspect Riders from Ridership_202001_clean";
-proc means
-        data=Ridership_202001_clean
-        maxdec=1
-        missing
-        n
-        nmiss
-        min q1 median q3 max
-        mean std
-    ;
-    var
-        Riders
-    ;
-    label
-        Ride2001=" "
-    ;
-run;
-title;
-
-title "Inspect Riders from Ridership_202101_clean";
-proc means
-        data=Ridership_202101_clean
-        maxdec=1
-        missing
-        n
-        nmiss
-        min q1 median q3 max
-        mean std
-    ;
-    var
-        Riders
-    ;
-    label
-        Ride2101=" "
+        Ride0901
+        Ride1001
+        Ride2001
+        Ride2101
     ;
 run;
 title;
@@ -132,8 +76,8 @@ Using Google Maps and the City Supervisory Map (cited on 04/22/2021),
 https://sfplanninggis.org/sffind/
 , Exit=EM MT are located in the Financial District, Region="SF_Dist3" 
 */
-data work.SF_Dist3;
-    set Ridership_202101_clean;
+data work.Region;
+    set Ridership_merged;
     if 
         Exit="EM" then Region="SF_Dist3";
     else if
@@ -147,14 +91,14 @@ data work.SF_Dist3;
 run;
 
 proc sort
-        data=SF_Dist3
-        out=work.temp
-        ;
+        data=Region
+        out=work.SF_Dist3
+        nodupkey
+    ;
     where
         Region="SF_Dist3"
     ;
     by
-        Riders
         Exit
     ;
 run;
@@ -189,7 +133,7 @@ First, we identify the Exit that stayed busy in 2021 starting from those
 listed above;
 
 data work.Workplace;
-    set Ridership_202101_clean;
+    set Ridership_appended;
     if 
         Exit="16" then Essential="1";
     else if
@@ -218,7 +162,6 @@ proc sort
         Essential="1"
     ;
     by
-        Riders
         Exit
     ;
 run;
