@@ -81,6 +81,13 @@ proc means
 run;
 title;
 
+proc sort 
+	data=Ridership_201001_clean
+	out=Ridership_201001_sorted
+    ;
+    by descending Riders;
+run;
+
 *******************************************************************************;
 * Research Question 2 Analysis Starting Point;
 *******************************************************************************;
@@ -117,6 +124,13 @@ proc means
 	;
 run;
 title;
+proc sort 
+	data=Ridership_202001_clean
+	out=Ridership_202001_sorted
+    ;
+    by descending Riders;
+run;
+
 
 title "Station with highest number of Entries in 2021";
 proc means 
@@ -137,6 +151,12 @@ proc means
 run;
 title;
 
+proc sort 
+	data=Ridership_202101_clean
+	out=Ridership_202101_sorted
+    ;
+    by descending Riders;
+run;
 
 *******************************************************************************;
 * Research Question 3 Analysis Starting Point;
@@ -237,57 +257,4 @@ data Ridership2020_2021_change;
 		end;
 run;
      
-
-/*
-Build final analytic dataset, including only the columns and minimal data-
-cleaning/transformation needed to address each research question/objective in
-corresponding data-analysis files.
-*/
-data finaldataset;
-    retain
-		Year
-		Month
-        Entry
-		Exit
-		Riders
-    ;
-    keep
-        Year
-        Month
-        Entry
-        Exit
-        Riders
-    ;
-    length
-        Year $15.
-        Month $100.
-    ;
-    merge
-        Ridership2009_2010_change
-        Ridership2020_2021_change
-    ;
-    by
-        Year
-    ;
-    if
-        not(missing(compress(Riders,'.','kd')))
-    then
-        do;
-            Riders = input(Riders_character,best12.2);
-        end;
-    else
-        do;
-            call missing(Riders);
-        end;
-    if
-        not(missing(Year))
-        and
-        not(missing(Month))
-        and
-        not(missing(Riders))
-    ;
-run;
-
-
-
 
