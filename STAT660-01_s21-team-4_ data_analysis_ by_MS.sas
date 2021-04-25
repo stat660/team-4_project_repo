@@ -20,7 +20,7 @@ answer the research questions below
 * Research Question 1 Analysis Starting Point;
 *******************************************************************************;
 /*
-Question 1 of 4: Which of the stations experienced the highest increase in 
+Question 1 of 3: Which of the stations experienced the highest increase in 
 frequency of entries, between January 2009 and January 2010?
 
 Limitations: There are no missing values or values that are zero in exit and entry
@@ -78,7 +78,7 @@ title;
 * Research Question 2 Analysis Starting Point;
 *******************************************************************************;
 /*
-Question 2 of 5: Which of the stations experienced the highest increase in 
+Question 2 of 3: Which of the stations experienced the highest increase in 
 frequency of entries, between January 2020 and January 2021?
 
 Limitations: There are no missing values or values that are zero in exit and entry
@@ -135,54 +135,54 @@ title;
 * Research Question 3 Analysis Starting Point;
 *******************************************************************************;
 /*
-Question 3 of 5: Where do riders that exit at SFO International airport station 
-mostly come from?
+Question 3 of 3: Can the Exit station with the highest number of riders in 2009
+be used to predict the following year's trend?
 
 Limitation: Any values that are missing should be excluded from data analysis.
 
-Methodology: Using the where statement, we can filter for Exits at SFO, then use 
-proc sort descending.
+Methodology: Using proc freq, we can compare the two columns.
 
-Rationale: This could help us understand where SFO employees live, assuming most 
-bart riders to SFO are employees.
+Rationale: This could help us understand whether or not people move around within
+the bay area for work as well as for residence.
 
-Notes: We can filter out exits at SFO from dataset, and then look at the number 
-of riders.  
+Notes: We can compare the exit columns from 2009 and 2010 ridership datasets.  
 */
 
+/* output frequencies of Exit to a dataset for manual inspection */
+proc freq
+        data= Ridership_2009_2010_01
+        noprint
+    ;
+    table
+        Exit
+        / out=Ridership_2009_2010_01
+    ;
+run;
 
-*******************************************************************************;
-* Research Question 3 Analysis Starting Point;
-*******************************************************************************;
-/*
-Question 4 of 5: Where do riders that enter from the SF stations (Embarcadero, 
-Montgomery, Powell, Civic, 12th and 16th street) mostly exit? 
+/* use manual inspection to create bins to study missing-value distribution */
+proc format;
+    value $Exit_bins
+        "-","NA"="Explicitly Missing"
+        "0.00"="Potentially Missing"
+        other="Valid Numerical Value"
+    ;
+run;
 
-Limitation: Any missing values should be excluded. 
-
-Methodology: Use where statement to filter for entry at the five stations, then
-use proc sort. 
-
-Rationale: This would help identify where most people that commute to work in 
-the city reside in.
-
-Note: We can filter out those 5 SF stations first using a where statement. 
-
-*/
-
-*******************************************************************************;
-* Research Question 4 Analysis Starting Point;
-*******************************************************************************;
-/*
-Question 5 of 5: Is there a difference for SF area commuters between the years?
-
-Limitation: Any missing values or zeros should be excluded from data analysis. 
-
-Methodology: 
-
-Rationale: Is there a difference from 2019 to 2020 to 2021?  
-
-Note: 2020 and 2021 should see a marked decrease in the 5 busiest exit stations 
-due to COVID-19.
-/*
+/* inspect study missing-value distribution */
+title "Inspect Exit from Ridership_2009_2010_01";
+proc freq
+        data=Ridership_2009_2010_01
+    ;
+    table
+        Exit
+        / nocum
+    ;
+    format
+        Exit $Exit_bins.
+    ;
+    label
+        Exit=" "
+    ;
+run;
+title;
 
