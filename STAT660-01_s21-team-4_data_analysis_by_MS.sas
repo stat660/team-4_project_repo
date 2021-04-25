@@ -221,8 +221,8 @@ Ridership.
 */
 data Ridership2009_2010_change;
     set
-        Ridership_2009_01(in=rd2009_data_row)
-        Ridership_2010_01(in=rd2010_data_row)
+        Ridership_200901(in=rd2009_data_row)
+        Ridership_201001(in=rd2010_data_row)
     ;
     if
         rd2009_data_row=1
@@ -242,8 +242,8 @@ Ridership.
 */
 data Ridership2020_2021_change;
     set
-        Ridership_2020_01(in=rd2020_data_row)
-        Ridership_2021_01(in=rd2021_data_row)
+        Ridership_202001(in=rd2020_data_row)
+        Ridership_202101(in=rd2021_data_row)
     ;
     if
         rd2020_data_row=1
