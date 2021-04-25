@@ -20,110 +20,122 @@ answer the research questions below
 * Research Question 1 Analysis Starting Point;
 *******************************************************************************;
 /*
-Question 1 of 4: Which of the stations has the highest frequency of entries and 
-exits, on average for January?
+Question 1 of 4: Which of the stations experienced the highest increase in 
+frequency of entries, between January 2009 and January 2010?
 
 Limitations: There are no missing values or values that are zero in exit and entry
 columns.
 
-Methodolgy: Proc Sort will create a table ordered in a descending manner. Since we
-want the highest, we just want the first observations for each dataset printed. 
+Methodolgy: Compare Entry Column from Ridership_200901_clean to column from
+Ridership_201001_clean using proc means.
 
 Rationale: This question helps us to understand which station is frequented or 
-busy, and if our common understanding that SF area being generally busy is 
-supported by actual data.
+busy in general, and if there was a significant difference in ridership from 2009 to
+2010.
 
 Notes: This analyzes the two columns of entries and exits to see which has the 
 highest count. 
 */
-
-/* Sorting for Exits for January of 2009*/ 
-
-proc sort
-        data=Ridership_200901
-		    out=Ridership_200901
+title "Station with highest frequency of Entries in 2009";
+proc means 
+		data=Ridership_200901_clean
+        maxdec=1
+        missing
+        n /* number of observations */
+        nmiss /* number of missing values */
+        min q1 median q3 max  /* five-number summary */
+        mean std /* two-number summary */
     ;
-	  by descending Exit Riders_200901;
+	var 
+		Entry Riders
+	;
+	label
+		Entry=" "
+	;
 run;
+title;
 
-proc print 
-        data=Ridership_200901(obs=1);
-	      var Entry Exit Riders_200901;
-run;
-
-/*Sorting for Entry for Jan of 2009 */
-
-proc sort
-        data=Ridership_200901
-		    out=Ridership_200901
+title "Station with highest number of Entries in 2010";
+proc means 
+		data=Ridership_201001_clean
+        maxdec=1
+        missing
+        n /* number of observations */
+        nmiss /* number of missing values */
+        min q1 median q3 max  /* five-number summary */
+        mean std /* two-number summary */
     ;
-	  by descending Entry Riders_200901;
+	var 
+		Entry Riders
+	;
+	label
+		Entry=" "
+	;
 run;
-
-proc print 
-        data=Ridership_200901(obs=1);
-	      var Entry Exit Riders_200901;
-run;
-
-/* Sorting for Exit for Jan of 2010 */
-
-proc sort
-        data=Ridership_201001
-		    out=Ridership_201001
-    ;
-	  by descending Exit Riders_201001;
-run;
-
-proc print 
-        data=Ridership_201001(obs=1);
-	      var Entry Exit Riders_201001;
-run;
-
-/*Sorting for Entry for Jan of 2010 */
-
-proc sort
-        data=Ridership_201001
-		    out=Ridership_201001
-    ;
-	  by descending Entry Riders_201001;
-run;
-
-proc print 
-        data=Ridership_201001(obs=1);
-	      var Entry Exit Riders_201001;
-run;
-
-/*Sorting for Exit for Jan of 2020 */
-
-proc sort
-        data=Ridership_202001
-		    out=Ridership_202001
-    ;
-	  by descending Exit Riders_202001;
-run;
-
-proc print 
-        data=Ridership_202001(obs=1);
-	      var Entry Exit Riders_201001;
-run;
-/* Sorting for Entry for Jan of 2020 */
-proc sort
-        data=Ridership_202001
-		    out=Ridership_202001
-    ;
-	  by descending Entry Riders_202001;
-run;
-
-proc print 
-        data=Ridership_202001(obs=1);
-	      var Entry Exit Riders_201001;
-run;
+title;
 
 *******************************************************************************;
 * Research Question 2 Analysis Starting Point;
 *******************************************************************************;
 /*
-Question 2 of 4: Where do riders that exit at SFO International airport station 
+Question 2 of 5: Which of the stations experienced the highest increase in 
+frequency of entries, between January 2020 and January 2021?
+
+Limitations: There are no missing values or values that are zero in exit and entry
+columns.
+
+Methodolgy: Compare Entry Column from Ridership_202001_clean to column from
+Ridership_202101_clean using proc means.
+
+Rationale: To see how Covid-19 affected Bart Ridership during State of Emergency.
+
+Notes: This analyzes the two columns of entries and exits to see which has the 
+highest count. 
+*/
+title "Station with highest frequency of Entries in 2020";
+proc means 
+		data=Ridership_202001_clean
+        maxdec=1
+        missing
+        n /* number of observations */
+        nmiss /* number of missing values */
+        min q1 median q3 max  /* five-number summary */
+        mean std /* two-number summary */
+    ;
+	var 
+		Entry Riders
+	;
+	label
+		Entry=" "
+	;
+run;
+title;
+
+title "Station with highest number of Entries in 2021";
+proc means 
+		data=Ridership_202101_clean
+        maxdec=1
+        missing
+        n /* number of observations */
+        nmiss /* number of missing values */
+        min q1 median q3 max  /* five-number summary */
+        mean std /* two-number summary */
+    ;
+	var 
+		Entry Riders
+	;
+	label
+		Entry=" "
+	;
+run;
+title;
+
+
+*******************************************************************************;
+* Research Question 3 Analysis Starting Point;
+*******************************************************************************;
+/*
+Question 3 of 5: Where do riders that exit at SFO International airport station 
 mostly come from?
 
 Limitation: Any values that are missing should be excluded from data analysis.
@@ -143,7 +155,7 @@ of riders.
 * Research Question 3 Analysis Starting Point;
 *******************************************************************************;
 /*
-Question 3 of 4: Where do riders that enter from the SF stations (Embarcadero, 
+Question 4 of 5: Where do riders that enter from the SF stations (Embarcadero, 
 Montgomery, Powell, Civic, 12th and 16th street) mostly exit? 
 
 Limitation: Any missing values should be excluded. 
@@ -162,7 +174,7 @@ Note: We can filter out those 5 SF stations first using a where statement.
 * Research Question 4 Analysis Starting Point;
 *******************************************************************************;
 /*
-Question 4 of 4: Is there a difference for SF area commuters between the years?
+Question 5 of 5: Is there a difference for SF area commuters between the years?
 
 Limitation: Any missing values or zeros should be excluded from data analysis. 
 
