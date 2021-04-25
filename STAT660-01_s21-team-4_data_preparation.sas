@@ -222,7 +222,7 @@ proc sort
 		not(missing(Exit))
 		and
         /* remove rows with Riders<1*/
-		not(Riders < 1)
+		not(missing(Riders))
 	;
 	by 
         Entry
@@ -262,7 +262,7 @@ proc sort
 		not(missing(Exit))
 		and
         /* remove rows with Riders<1*/
-		not(Riders < 1)
+		not(missing(Riders))
 	;
 	by 
         Entry
@@ -348,5 +348,114 @@ proc sort
         Entry
         Exit 
 		Riders
+	;
+run;
+
+
+
+/*
+Concatenate Ridership data vertically, combine composite key into a primary key.
+The paired Entry Exit and Month are a primary key since we only evaluate the 
+average weekday ridership in January for any given Year.
+
+RideYYMM is the Ridership average for the corresponding 4-digit Year and Month.
+*/
+data Ridership_200901;
+    set 
+	    Ridership_200901_clean;
+	drop
+	    Year
+		Month
+		Riders
+	;
+    if
+	    not(missing(Riders))
+	then
+	    Ride0901=Riders;
+	;
+run;
+
+
+
+data Ridership_201001;
+    set 
+	    Ridership_201001_clean;
+	drop
+	    Year
+		Month
+		Riders
+	;
+    if
+	    not(missing(Riders))
+	then
+	    Ride1001=Riders;
+	;
+run;
+
+
+
+data Ridership_202001;
+    set 
+	    Ridership_202001_clean;
+	drop
+	    Year
+		Month
+		Riders
+	;
+    if
+	    not(missing(Riders))
+	then
+	    Ride2001=Riders;
+	;
+run;
+
+
+
+data Ridership_202101;
+    set 
+	    Ridership_202101_clean;
+	drop
+	    Year
+		Month
+		Riders
+	;
+    if
+	    not(missing(Riders))
+	then
+	    Ride2101=Riders;
+	;
+run;
+
+
+
+/*
+Match-merge tables in DATA Step
+*/
+data Ridership_merged;
+    set 
+        Ridership_200901
+	;
+	set
+        Ridership_201001
+	;
+    set 
+        Ridership_202001
+	;
+    set 
+        Ridership_202101
+	;
+run;
+
+
+
+/*
+Concatenate tables, but there are some missing observations that can be omitted.
+*/
+data Ridership_appended;
+    set
+	    Ridership_200901
+		Ridership_201001
+		Ridership_202001
+		Ridership_202101
 	;
 run;
