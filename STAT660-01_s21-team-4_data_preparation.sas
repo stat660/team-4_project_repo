@@ -472,88 +472,6 @@ run;
 
 
 /*
-Appended
-*/
-data Ridership_200901;
-    set 
-        Ridership_200901_clean;
-    drop
-        Year
-        Month
-        Riders
-    ;
-    if
-        not(missing(Riders))
-    then
-        Ride0901=Riders;
-    ;
-run;
-
-
-
-data Ridership_201001;
-    set 
-        Ridership_201001_clean;
-    drop
-        Year
-        Month
-        Riders
-    ;
-    if
-        not(missing(Riders))
-    then
-        Ride1001=Riders;
-    ;
-run;
-
-
-
-data Ridership_202001;
-    set 
-        Ridership_202001_clean;
-    drop
-        Year
-        Month
-        Riders
-    ;
-    if
-        not(missing(Riders))
-    then
-        Ride2001=Riders;
-    ;
-run;
-
-
-
-data Ridership_202101;
-    set 
-        Ridership_202101_clean;
-    drop
-        Year
-        Month
-        Riders
-    ;
-    if
-        not(missing(Riders))
-    then
-        Ride2101=Riders;
-    ;
-run;
-
-
-
-data Ridership_appended;
-    set
-        Ridership_200901
-        Ridership_201001
-        Ridership_202001
-        Ridership_202101
-    ;
-run;
-
-
-
-/*
 Data-integrity step added to check duplicates.
 */
 data Ridership_dups;
@@ -579,14 +497,13 @@ run;
 
 
 /*
-Prepare datasets 2009, 2010, 2020, 2021
+Prepare data sets 2009, 2010 for concatenation
 */
 data Ridership_200901a;
     set 
         Ridership_200901_clean;
     drop
         Month
-        Riders
     ;
 run;
 
@@ -597,7 +514,6 @@ data Ridership_201001a;
         Ridership_201001_clean;
     drop
         Month
-        Riders
     ;
 run;
 
@@ -623,12 +539,14 @@ run;
 
 
 
+/*
+Prepare data set 2020 for concatenation
+*/
 data Ridership_202001a;
     set 
         Ridership_202001_int;
     drop
         Month
-        Riders
     ;
 run;
 
@@ -654,12 +572,14 @@ run;
 
 
 
+/*
+Prepare data set 2021 for concatenation
+*/
 data Ridership_202101a;
     set 
         Ridership_202101_int;
     drop
         Month
-        Riders
     ;
 run;
 
@@ -677,7 +597,7 @@ run;
 
 
 /*
-Data-integrity: remove missing
+Data-integrity step to remove missing
 */
 data Ridership_appended_missing;
     set Ridership_appended;
