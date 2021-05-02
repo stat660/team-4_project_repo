@@ -613,3 +613,17 @@ data Ridership_appended_missing;
             output;
         end;
 run;
+
+
+
+/*
+Delete unused data sets
+*/
+proc datasets
+    library=work
+    ;
+    save
+        Ridership_merged
+        Ridership_appended
+    ;
+run;
