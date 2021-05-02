@@ -474,6 +474,74 @@ run;
 /*
 Appended
 */
+data Ridership_200901;
+    set 
+        Ridership_200901_clean;
+    drop
+        Year
+        Month
+        Riders
+    ;
+    if
+        not(missing(Riders))
+    then
+        Ride0901=Riders;
+    ;
+run;
+
+
+
+data Ridership_201001;
+    set 
+        Ridership_201001_clean;
+    drop
+        Year
+        Month
+        Riders
+    ;
+    if
+        not(missing(Riders))
+    then
+        Ride1001=Riders;
+    ;
+run;
+
+
+
+data Ridership_202001;
+    set 
+        Ridership_202001_clean;
+    drop
+        Year
+        Month
+        Riders
+    ;
+    if
+        not(missing(Riders))
+    then
+        Ride2001=Riders;
+    ;
+run;
+
+
+
+data Ridership_202101;
+    set 
+        Ridership_202101_clean;
+    drop
+        Year
+        Month
+        Riders
+    ;
+    if
+        not(missing(Riders))
+    then
+        Ride2101=Riders;
+    ;
+run;
+
+
+
 data Ridership_appended;
     set
         Ridership_200901
@@ -502,6 +570,124 @@ data Ridership_dups;
         missing(Ride2001)
         and
         missing(Ride2101)
+    then
+        do;
+            output;
+        end;
+run;
+
+
+
+/*
+Prepare datasets 2009, 2010, 2020, 2021
+*/
+data Ridership_200901a;
+    set 
+        Ridership_200901_clean;
+    drop
+        Month
+        Riders
+    ;
+run;
+
+
+
+data Ridership_201001a;
+    set 
+        Ridership_201001_clean;
+    drop
+        Month
+        Riders
+    ;
+run;
+
+
+
+/*
+Restructure Riders in data set 2020 into integers from characters
+*/
+data Ridership_202001_int(
+    drop=
+        Riders_char
+    );
+    set Ridership_202001_clean(
+        rename=(
+            Riders=Riders_char
+        )
+        where=(
+            strip(Riders_char) ne "-"
+        )
+    );
+    Riders=input(Riders_char,best12.);
+run;
+
+
+
+data Ridership_202001a;
+    set 
+        Ridership_202001_int;
+    drop
+        Month
+        Riders
+    ;
+run;
+
+
+
+/*
+Restructure Riders in data set 2021 into integers from characters
+*/
+data Ridership_202101_int(
+    drop=
+        Riders_char
+    );
+    set Ridership_202101_clean(
+        rename=(
+            Riders=Riders_char
+        )
+        where=(
+            strip(Riders_char) ne "-"
+        )
+    );
+    Riders=input(Riders_char,best12.);
+run;
+
+
+
+data Ridership_202101a;
+    set 
+        Ridership_202101_int;
+    drop
+        Month
+        Riders
+    ;
+run;
+
+
+
+data Ridership_appended;
+    set
+        Ridership_200901a
+        Ridership_201001a
+        Ridership_202001a
+        Ridership_202101a
+    ;
+run;
+
+
+
+/*
+Data-integrity: remove missing
+*/
+data Ridership_appended_missing;
+    set Ridership_appended;
+    by
+        Year
+        Exit
+        Entry
+    ;
+    if
+        missing(Riders)
     then
         do;
             output;
