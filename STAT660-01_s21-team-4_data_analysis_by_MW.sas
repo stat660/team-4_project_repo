@@ -77,17 +77,27 @@ https://sfplanninggis.org/sffind/
 , Exit=EM MT are located in the Financial District, Region="SF_Dist3" 
 */
 data work.Region;
-    set Ridership_merged;
+    set Ridership_appended;
     if 
-        Exit="EM" then Region="SF_Dist3";
+        Exit="EM" 
+        then
+            Region="SF_Dist3"
+    ;
     else if
-        Exit="MT" then Region="SF_Dist3";
-    else Region=" ";
+        Exit="MT" 
+        then 
+            Region="SF_Dist3"
+    ;
+    else
+        Region=" "
+    ;
     keep 
+        Year
         Entry
         Exit
         Riders
-        Region;
+        Region
+    ;
 run;
 
 proc sort
@@ -191,17 +201,11 @@ Here's the means step for a general overview if there is difference in data
 summary between 2009 and 2010.
 */
 proc means
-        data=Ridership_200901_clean
-        n mean std max
+        data=Ridership_appended
+        n mean std max sum
     ;
-    var
-        Riders
-    ;
-run;
-
-proc means
-        data=Ridership_201001_clean
-        n mean std max
+    class
+        Year
     ;
     var
         Riders

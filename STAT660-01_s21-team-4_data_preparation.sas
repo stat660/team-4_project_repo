@@ -207,27 +207,27 @@ columns in Ridership_200901_clean are guaranteed to form a composite key.
 */
 proc sort 
         nodupkey
-		data=Ridership_200901_raw
-		dupout=Ridership_200901_raw_dups
-		out=Ridership_200901_clean
-	;
-	where
+        data=Ridership_200901_raw
+        dupout=Ridership_200901_raw_dups
+        out=Ridership_200901_clean
+    ;
+    where
         /* remove rows with missing composite key components */
-	    not(missing(Year))
-		and
-		not(missing(Month))
-		and
-		not(missing(Entry))
-		and
-		not(missing(Exit))
-		and
+        not(missing(Year))
+        and
+        not(missing(Month))
+        and
+        not(missing(Entry))
+        and
+        not(missing(Exit))
+        and
         /* remove rows with Riders<1*/
-		not(missing(Riders))
-	;
-	by 
+        not(missing(Riders))
+    ;
+    by 
         Entry
         Exit 
-		Riders
+        Riders
 ;
 run;
    
@@ -247,27 +247,27 @@ columns in Ridership_201001_clean are guaranteed to form a composite key.
 */
 proc sort 
         nodupkey
-		data=Ridership_201001_raw
-		dupout=Ridership_201001_raw_dups
-		out=Ridership_201001_clean
-	;
-	where
+        data=Ridership_201001_raw
+        dupout=Ridership_201001_raw_dups
+        out=Ridership_201001_clean
+    ;
+    where
         /* remove rows with missing composite key components */
-	    not(missing(Year))
-		and
-		not(missing(Month))
-		and
-		not(missing(Entry))
-		and
-		not(missing(Exit))
-		and
+        not(missing(Year))
+        and
+        not(missing(Month))
+        and
+        not(missing(Entry))
+        and
+        not(missing(Exit))
+        and
         /* remove rows with Riders<1*/
-		not(missing(Riders))
-	;
-	by 
+        not(missing(Riders))
+    ;
+    by 
         Entry
         Exit 
-		Riders
+        Riders
     ;
 run;
 
@@ -287,28 +287,28 @@ columns in Ridership_202001_clean are guaranteed to form a composite key.
 */
 proc sort 
         nodupkey
-		data=Ridership_202001_raw
-		dupout=Ridership_202001_raw_dups
-		out=Ridership_202001_clean
-	;
-	where
+        data=Ridership_202001_raw
+        dupout=Ridership_202001_raw_dups
+        out=Ridership_202001_clean
+    ;
+    where
         /* remove rows with missing composite key components */
-	    not(missing(Year))
-		and
-		not(missing(Month))
-		and
-		not(missing(Entry))
-		and
-		not(missing(Exit))
-		and
+        not(missing(Year))
+        and
+        not(missing(Month))
+        and
+        not(missing(Entry))
+        and
+        not(missing(Exit))
+        and
         /* remove rows with missing Riders*/
-		not(missing(Riders))
-	;
-	by 
+        not(missing(Riders))
+    ;
+    by 
         Entry
         Exit 
-		Riders
-	;
+        Riders
+    ;
 run;
 
 
@@ -327,28 +327,28 @@ columns in Ridership_202101_clean are guaranteed to form a composite key.
 */
 proc sort 
         nodupkey
-		data=Ridership_202101_raw
-		dupout=Ridership_202101_raw_dups
-		out=Ridership_202101_clean
-	;
-	where
+        data=Ridership_202101_raw
+        dupout=Ridership_202101_raw_dups
+        out=Ridership_202101_clean
+    ;
+    where
         /* remove rows with missing composite key components */
-	    not(missing(Year))
-		and
-		not(missing(Month))
-		and
-		not(missing(Entry))
-		and
-		not(missing(Exit))
-		and
+        not(missing(Year))
+        and
+        not(missing(Month))
+        and
+        not(missing(Entry))
+        and
+        not(missing(Exit))
+        and
         /* remove rows with missing Riders*/
-		not(missing(Riders))
-	;
-	by 
+        not(missing(Riders))
+    ;
+    by 
         Entry
         Exit 
-		Riders
-	;
+        Riders
+    ;
 run;
 
 
@@ -362,68 +362,68 @@ RideYYMM is the Ridership average for the corresponding 4-digit Year and Month.
 */
 data Ridership_200901;
     set 
-	    Ridership_200901_clean;
-	drop
-	    Year
-		Month
-		Riders
-	;
+        Ridership_200901_clean;
+    drop
+        Year
+        Month
+        Riders
+    ;
     if
-	    not(missing(Riders))
-	then
-	    Ride0901=Riders;
-	;
+        not(missing(Riders))
+    then
+        Ride0901=Riders;
+    ;
 run;
 
 
 
 data Ridership_201001;
     set 
-	    Ridership_201001_clean;
-	drop
-	    Year
-		Month
-		Riders
-	;
+        Ridership_201001_clean;
+    drop
+        Year
+        Month
+        Riders
+    ;
     if
-	    not(missing(Riders))
-	then
-	    Ride1001=Riders;
-	;
+        not(missing(Riders))
+    then
+        Ride1001=Riders;
+    ;
 run;
 
 
 
 data Ridership_202001;
     set 
-	    Ridership_202001_clean;
-	drop
-	    Year
-		Month
-		Riders
-	;
+        Ridership_202001_clean;
+    drop
+        Year
+        Month
+        Riders
+    ;
     if
-	    not(missing(Riders))
-	then
-	    Ride2001=Riders;
-	;
+        not(missing(Riders))
+    then
+        Ride2001=Riders;
+    ;
 run;
 
 
 
 data Ridership_202101;
     set 
-	    Ridership_202101_clean;
-	drop
-	    Year
-		Month
-		Riders
-	;
+        Ridership_202101_clean;
+    drop
+        Year
+        Month
+        Riders
+    ;
     if
-	    not(missing(Riders))
-	then
-	    Ride2101=Riders;
-	;
+        not(missing(Riders))
+    then
+        Ride2101=Riders;
+    ;
 run;
 
 
@@ -434,28 +434,196 @@ Match-merge tables in DATA Step
 data Ridership_merged;
     set 
         Ridership_200901
-	;
-	set
+    ;
+    set
         Ridership_201001
-	;
+    ;
     set 
         Ridership_202001
-	;
+    ;
     set 
         Ridership_202101
-	;
+    ;
+run;
+
+
+
+/* Add drop and swap for Ride2001 and Ride2101 to restructure numeric values from character values */
+data Ridership(
+    drop=
+        Ride2001_char
+        Ride2101_char
+    );
+    set work.Ridership_merged(
+        rename=(
+            Ride2001=Ride2001_char
+            Ride2101=Ride2101_char
+        )
+        where=(
+            strip(Ride2001_char) ne "-"
+            and
+            strip(Ride2101_char) ne "-"
+        )
+    );
+    Ride2001=input(Ride2001_char,best12.);
+    Ride2101=input(Ride2101_char,best12.);
 run;
 
 
 
 /*
-Concatenate tables, but there are some missing observations that can be omitted.
+Data-integrity step added to check duplicates.
 */
+data Ridership_dups;
+    set Ridership;
+    by 
+        Exit
+        Entry
+    ;
+    if
+        missing(Ride0901)
+        and
+        missing(Ride1001)
+        and
+        missing(Ride2001)
+        and
+        missing(Ride2101)
+    then
+        do;
+            output;
+        end;
+run;
+
+
+
+/*
+Prepare data sets 2009, 2010 for concatenation
+*/
+data Ridership_200901a;
+    set 
+        Ridership_200901_clean;
+    drop
+        Month
+    ;
+run;
+
+
+
+data Ridership_201001a;
+    set 
+        Ridership_201001_clean;
+    drop
+        Month
+    ;
+run;
+
+
+
+/*
+Restructure Riders in data set 2020 into integers from characters
+*/
+data Ridership_202001_int(
+    drop=
+        Riders_char
+    );
+    set Ridership_202001_clean(
+        rename=(
+            Riders=Riders_char
+        )
+        where=(
+            strip(Riders_char) ne "-"
+        )
+    );
+    Riders=input(Riders_char,best12.);
+run;
+
+
+
+/*
+Prepare data set 2020 for concatenation
+*/
+data Ridership_202001a;
+    set 
+        Ridership_202001_int;
+    drop
+        Month
+    ;
+run;
+
+
+
+/*
+Restructure Riders in data set 2021 into integers from characters
+*/
+data Ridership_202101_int(
+    drop=
+        Riders_char
+    );
+    set Ridership_202101_clean(
+        rename=(
+            Riders=Riders_char
+        )
+        where=(
+            strip(Riders_char) ne "-"
+        )
+    );
+    Riders=input(Riders_char,best12.);
+run;
+
+
+
+/*
+Prepare data set 2021 for concatenation
+*/
+data Ridership_202101a;
+    set 
+        Ridership_202101_int;
+    drop
+        Month
+    ;
+run;
+
+
+
 data Ridership_appended;
     set
-	    Ridership_200901
-		Ridership_201001
-		Ridership_202001
-		Ridership_202101
-	;
+        Ridership_200901a
+        Ridership_201001a
+        Ridership_202001a
+        Ridership_202101a
+    ;
+run;
+
+
+
+/*
+Data-integrity step to remove missing
+*/
+data Ridership_appended_missing;
+    set Ridership_appended;
+    by
+        Year
+        Exit
+        Entry
+    ;
+    if
+        missing(Riders)
+    then
+        do;
+            output;
+        end;
+run;
+
+
+
+/*
+Delete unused data sets
+*/
+proc datasets
+    library=work
+    ;
+    save
+        Ridership_merged
+        Ridership_appended
+    ;
 run;
