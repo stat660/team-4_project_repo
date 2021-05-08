@@ -25,32 +25,103 @@ Question 1 of 4: Which five stations are the busiest in January 2009, 2010,
 
 Rationale: We are interested in the data exploration process.
 
-Note: This compares the column "Riders" from Ridership_202001_raw and take the
+Note: This compares the column "Riders" from Ridership_appended and take the
 largest values.
 
 Limitations: How to find the max(5) values for the paired entry and exit? 
 Perhaps we need to combine the total entry and total exit to answer, or if not
 we will need to refine what constitutes of being the "busiest" station.
 */
-
-title "Inspect Riders from Match-Merged";
-proc means
-        data=Ridership_merged
-        maxdec=1
-        missing
-        n
-        nmiss
-        min q1 median q3 max
-        mean std
+title  "Summary of Appended Tables classified by Entry";
+proc summary
+        data=Ridership_appended(
+            where=(not(missing(Exit)))
+    );
+    class
+        Entry
     ;
     var
-        Ride0901
-        Ride1001
-        Ride2001
-        Ride2101
+        Riders
+        Year
+    ;
+    output
+        out=SummaryOutput_Entry
+        sum=
     ;
 run;
 title;
+
+
+/* Sort the highest Ridership value */
+proc sort
+        data=SummaryOutput_Entry
+        out=SummarySort_Entry
+    ;
+    by descending Riders
+    ;
+    where Entry ne ' ';
+run;
+
+
+title  "5 Most Utilized Entry in Combined Years (2009, 2010, 2020, 2021)";
+proc print
+        data=SummarySort_Entry(obs=5)
+    ;
+    id
+        Entry
+    ;
+    var
+        Riders
+    ;
+
+run;
+title;
+
+
+title  "Summary of Appended Tables classified by Entry";
+proc summary
+        data=Ridership_appended(
+            where=(not(missing(Exit)))
+    );
+    class
+        Exit
+    ;
+    var
+        Riders
+        Year
+    ;
+    output
+        out=SummaryOutput_Exit
+        sum=
+    ;
+run;
+title;
+
+
+/* Sort the highest Ridership value */
+proc sort
+        data=SummaryOutput_Exit
+        out=SummarySort_Exit
+    ;
+    by descending Riders
+    ;
+    where Exit ne ' ';
+run;
+
+
+title  "5 Most Utilized Exit in Combined Years (2009, 2010, 2020, 2021)";
+proc print
+        data=SummarySort_Exit(obs=5)
+    ;
+    id
+        Exit
+    ;
+    var
+        Riders
+    ;
+run;
+title;
+
 
 *******************************************************************************;
 * Research Question 2 Analysis Starting Point;
@@ -111,6 +182,9 @@ proc sort
     by
         Exit
     ;
+run;
+
+proc print;
 run;
 
 
@@ -200,14 +274,30 @@ Then, we can take the sum of Riders based on Exit name to compare the means.
 Here's the means step for a general overview if there is difference in data
 summary between 2009 and 2010.
 */
-proc means
-        data=Ridership_appended
-        n mean std max sum
-    ;
-    class
-        Year
+/* Total Average Weekday Ridership by Year */
+proc summary
+        data=Ridership
     ;
     var
-        Riders
+        Ride0901
+        Ride1001
+        Ride2001
+        Ride2101
+    ;
+    output
+        out=TotalByYear
+        sum=
     ;
 run;
+
+
+/* From the column-wise total we notice a decline in the average weekday ridership
+in 2010 from 2009 if we assumed that the Ridership growth rate between 2009-2020
+is nonnegative. Summary table is inadequate to evaluate statistical significance.*/
+title  "Total Riderships in 2009, 2010, 2020, and 2021";
+proc print
+        data=TotalByYear
+        noobs
+    ;
+run;
+title;
