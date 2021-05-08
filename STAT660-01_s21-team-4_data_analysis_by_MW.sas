@@ -171,6 +171,7 @@ data work.Region;
     ;
 run;
 
+
 proc sort
         data=Region
         out=work.SF_Dist3
@@ -181,6 +182,8 @@ proc sort
     ;
     by
         Exit
+        descending
+            Riders
     ;
 run;
 
@@ -215,7 +218,6 @@ Ridership_202101 and Exit are associated with where essential workers work.
 
 First, we identify the Exit that stayed busy in 2021 starting from those
 listed above;
-
 data work.Workplace;
     set Ridership_appended;
     if 
@@ -231,7 +233,8 @@ data work.Workplace;
     else if
         Exit="CC" then Essential="1";
     else Essential="0";
-    keep 
+    keep
+        Year 
         Entry
         Exit
         Riders
@@ -240,15 +243,94 @@ run;
 
 proc sort
         data=Workplace
-        out=work.temp
+        out=Workplace_essential
         ;
     where
         Essential="1"
     ;
     by
+        Year
+        Entry
+    ;
+run;
+
+
+/* In this procedure, we create a table of summary with the sum of essential*/
+proc means
+        data=Workplace_essential
+        nonobs
+        max
+        sum
+        maxdec=0
+    ;
+    class
+        Exit
+    ;
+    var
+        Riders
+    ;
+run;
+
+
+data work.Workplace_merged;
+    set Ridership;
+    if 
+        Exit="16" then Essential="1";
+    else if
+        Exit="24" then Essential="1";
+    else if
+        Exit="EM" then Essential="1";
+    else if
+        Exit="MT" then Essential="1";
+    else if
+        Exit="PL" then Essential="1";
+    else if
+        Exit="CC" then Essential="1";
+    else Essential="0";
+run;
+
+proc sort
+        data=Workplace_merged
+    ;
+    where
+        Essential=1
+    ;
+    by
         Exit
     ;
 run;
+
+
+proc sort
+        data=Workplace_merged
+        out=Workplace_merged_essential
+        ;
+    where
+        Essential="1"
+    ;
+    by
+        Entry
+    ;
+run;
+
+
+proc means
+        data=Workplace_merged_essential
+        nonobs
+        sum
+        maxdec=0
+    ;
+    class
+        Exit
+    ;
+    var
+        Ride0901
+        Ride1001
+        Ride2001
+        Ride2101
+    ;
+run;
+
 
 
 *******************************************************************************;
