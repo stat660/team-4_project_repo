@@ -459,16 +459,6 @@ run;
 
 
 /*
-We evaluate the variables and their attributes using CONTENTS procedure before
-proceeding with numeric operations. This procedure confirms confirm that 
-Ride0901 Ride1001 are numeric and Ride2001 Ride2101 are character variables.
-*/
-proc contents
-    data=Ridership_merged;
-run;
-
-
-/*
 Because we will perform operations with the values from Ride0901, Ride1001,
 Ride2001, and Ride2101, we apply the add-drop-and-swap approach for the columns
 Ride2001 and Ride2101 to restructure the variable into numeric from character.
@@ -491,14 +481,6 @@ data Ridership(
     );
     Ride2001=input(Ride2001_char,best12.);
     Ride2101=input(Ride2101_char,best12.);
-run;
-
-
-/*
-We confirm that the columns that begins with Ride% has a variable Type=Num.
-*/
-proc contents
-    data=Ridership;
 run;
 
 
@@ -529,35 +511,23 @@ run;
 
 /*
 Unlike the match-merge approach, the concatenation of the variable Riders will
-require the variables to have the same Type=Num. Because Riders from
-Ridership_200901_clean and Ridership_201001_clean have the variable Type=Num,
-we proceed with dropping the unusable variable Month since all observations
-evaluated came from January.
-Prepare data sets 2009, 2010 for concatenation
-*/
-data Ridership_200901a;
-    set 
-        Ridership_200901_clean;
-    drop
-        Month
-    ;
-run;
+require the variable Riders to have the same Type=Num. Riders from
+Ridership_200901_clean and Ridership_201001_clean have the variable Type=Num
+that we can use, but Ridership_202001_clean and Ridership_202101_clean have the
+variable Type=Char. We follow the add-drop-and-swap approach to restructure the
+variable Type into numeric from character. 
 
+We restructure the Type of variable for Riders from Ridership_202001_clean into
+numeric from character value. As a result, the variable Riders in the new data
+file Ridership_202001_int contains Riders with the Type=Num.
 
-/*
-Prepare data set 2010 for concatenation by dropping the unused variable Month.
-*/
-data Ridership_201001a;
-    set 
-        Ridership_201001_clean;
-    drop
-        Month
-    ;
-run;
-
-
-/*
-Restructure Riders in data set 2020 into integers from characters
+Within the SET statement, we use the RENAME clause to reassign the column name
+with Riders_char. The WHERE clause that follows identifies the values in
+Riders_char without a dash. In the original data, a dash (-) denotes any 
+missing observations in Riders. The STRIP function keeps the remaining 
+observations that are without a dash as a numeric value in Riders. Using the
+INPUT statement, we create a numeric variable Riders using the values kept from
+the STRIP function. Hence, the Riders has Type=Num in Ridership_202001_int.
 */
 data Ridership_202001_int(
     drop=
@@ -576,19 +546,17 @@ run;
 
 
 /*
-Prepare data set 2020 for concatenation by dropping the unused variable Month.
-*/
-data Ridership_202001a;
-    set 
-        Ridership_202001_int;
-    drop
-        Month
-    ;
-run;
+We restructure the Type of variable for Riders from Ridership_202101_clean into
+numeric from character value. As a result, the variable Riders in the new data
+file Ridership_202101_int contains Riders with the Type=Num.
 
-
-/*
-Restructure Riders in data set 2021 into integers from characters
+Within the SET statement, we use the RENAME clause to reassign the column name
+with Riders_char. The WHERE clause that follows identifies the values in
+Riders_char without a dash. In the original data, a dash (-) denotes any 
+missing observations in Riders. The STRIP function keeps the remaining 
+observations that are without a dash as a numeric value in Riders. Using the
+INPUT statement, we create a numeric variable Riders using the values kept from
+the STRIP function. Hence, the Riders has Type=Num in Ridership_202101_int.
 */
 data Ridership_202101_int(
     drop=
@@ -606,30 +574,22 @@ data Ridership_202101_int(
 run;
 
 
-
 /*
-Prepare data set 2021 for concatenation by dropping the unused variable Month.
+Concatenate 4 data files and remove the unused variable Month since all
+observations evaluated has the same character value Month="January".
 */
-data Ridership_202101a;
-    set 
-        Ridership_202101_int;
+data Ridership_appended;
     drop
         Month
     ;
-run;
-
-
-/*
-Create Ridership_appended that contains the concatenation 4 data files.
-*/
-data Ridership_appended;
     set
-        Ridership_200901a
-        Ridership_201001a
-        Ridership_202001a
-        Ridership_202101a
+        Ridership_200901_clean
+        Ridership_201001_clean
+        Ridership_202001_int
+        Ridership_202101_int
     ;
 run;
+
 
 /*
 Data-integrity step to remove observations with any missing Riders.
@@ -646,7 +606,7 @@ run;
 
 
 /*
-Delete unused data sets.
+Delete unused data files while keeping 
 
 */
 proc datasets
