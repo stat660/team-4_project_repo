@@ -20,11 +20,6 @@ answer the research questions below
 * Research Question 1 Analysis Starting Point;
 *******************************************************************************;
 /*
-Question 1 of 4: Which five stations are the busiest in January 2009, 2010, 
-2020, and 2021? 
-
-Rationale: We are interested in the data exploration process.
-
 Note: This compares the column "Riders" from Ridership_appended and take the
 largest values.
 
@@ -41,7 +36,6 @@ descending order for non-missing Entry.
 Followup Steps: Relabel the column sum appropriately so that it is not 
 mistakenly used as an observation. Separate Ridership total by Year for Entry.
 */
-title  "Summary of Appended Tables classified by Entry";
 proc summary
         data=Ridership_appended(
             where=(not(missing(Exit)))
@@ -58,7 +52,6 @@ proc summary
         sum=
     ;
 run;
-title;
 
 
 /* Sort the highest Ridership value for Entry */
@@ -71,8 +64,23 @@ proc sort
     where Entry ne ' ';
 run;
 
+title1 justify=left
+'Question 1 of 4: Which five stations are the busiest in January 2009, 2010, 
+2020, and 2021?'
+;
 
-title  "5 Most Utilized Entry in Combined Years (2009, 2010, 2020, 2021)";
+title2 justify=left
+'Rationale: We are interested in the data exploration process.'
+;
+
+footnote1 justify=left
+'Summary of Appended Tables classified by Entry'
+;
+
+footnote2
+'5 Most Utilized Entry in Combined Years (2009, 2010, 2020, 2021)'
+;
+
 proc print
         data=SummarySort_Entry(obs=5)
     ;
@@ -84,7 +92,10 @@ proc print
     ;
 
 run;
+
+/* Clear titles/footnotes */
 title;
+footnote;
 
 
 /* Summary of the combined ridership for Exit from Ridership_appended */
