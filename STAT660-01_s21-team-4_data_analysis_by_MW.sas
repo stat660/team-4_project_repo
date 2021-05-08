@@ -31,6 +31,15 @@ largest values.
 Limitations: How to find the max(5) values for the paired entry and exit? 
 Perhaps we need to combine the total entry and total exit to answer, or if not
 we will need to refine what constitutes of being the "busiest" station.
+
+Methodology: Use the SUMMARY procedure to classify by Entry and the SUM clause
+is added to combine the Riders from Year=2009, 2010, 2020, and 2021. We notice
+that the SUMMARY procedure also creates a missing Entry at the last row which
+represents the column total. The SORT procedure assembles the Riders in
+descending order for non-missing Entry.
+
+Followup Steps: Relabel the column sum appropriately so that it is not 
+mistakenly used as an observation. Separate Ridership total by Year for Entry.
 */
 title  "Summary of Appended Tables classified by Entry";
 proc summary
@@ -52,7 +61,7 @@ run;
 title;
 
 
-/* Sort the highest Ridership value */
+/* Sort the highest Ridership value for Entry */
 proc sort
         data=SummaryOutput_Entry
         out=SummarySort_Entry
@@ -78,7 +87,7 @@ run;
 title;
 
 
-title  "Summary of Appended Tables classified by Entry";
+/* Summary of the combined ridership for Exit from Ridership_appended */
 proc summary
         data=Ridership_appended(
             where=(not(missing(Exit)))
@@ -95,10 +104,9 @@ proc summary
         sum=
     ;
 run;
-title;
 
 
-/* Sort the highest Ridership value */
+/* Sort the highest Ridership value for Exit */
 proc sort
         data=SummaryOutput_Exit
         out=SummarySort_Exit
@@ -140,14 +148,17 @@ We might need to create an iterative function or use DO LOOP Statement.
 Limitations: We assume that the library data from the BART is accurate and 
 unchanged. Thus, we confirm with other sources about which stations are located
 in the San Francisco's Financial District to create a variable for validation.
-*/
 
-/* 
-Using Google Maps and the City Supervisory Map (cited on 04/22/2021), 
+Methodology: By Google Maps and the City Supervisory Map (cited on 04/22/2021), 
 https://sfplanninggis.org/sffind/
-, Exit=EM MT are located in the Financial District, Region="SF_Dist3" 
+, Exit=EM MT are identified to be in the Financial District, Region="SF_Dist3".
+Use DATA step to create and assign Region="SF_Dist3" for Exit=EM MT, otherwise
+empty (Region=" "). Use SORT procedure assembles the Riders in descending order.
+
+Followup Steps: Filter Riders by Entry to know the corresponding Entry with most
+Riders for the eligible Exit located in the San Francisco's Financial District.
 */
-data work.Region;
+data Region;
     set Ridership_appended;
     if 
         Exit="EM" 
@@ -171,9 +182,11 @@ data work.Region;
     ;
 run;
 
+
+/* Sort eligible Exit in specified Region by Riders. */
 proc sort
         data=Region
-        out=work.SF_Dist3
+        out=SF_Dist3
         nodupkey
     ;
     where
@@ -181,10 +194,9 @@ proc sort
     ;
     by
         Exit
+        descending
+            Riders
     ;
-run;
-
-proc print;
 run;
 
 
@@ -205,17 +217,18 @@ changes in the most used Exit.
 
 Limitations: We assume that the Average Weekday Ridership as described by 
 Ridership_202101 and Exit are associated with where essential workers work.
+
+Methodology: We identify that Exit=EM MT PL CC 16 24 in 2021 are near essential
+businesses such as transportation hubs, medical centers, and government offices.
+Use DATA step to subset the Ridership_appended file and assign Essential=1 for
+the eligible Exit. Use SORT procedure to subset Exit that are Essential=1.
+Use MEANS procedure to analyze the sum of average weekday ridership for the
+eligible Exit in January 2009 (Ride0901), January 2010 (Ride1001), January 2020
+(Ride2001), and January 2021 (Ride2101).
+
+Followup Steps: Add stratification by Entry to find the corresponding Entry
+for each eligible Exit.
 */
-
-* Our alternate hypothesis claims that Exit=EM MT PL CC 16 24 in 2021 have
-  a higher means compared to the population means. EM and MT are near a
-  transbay transportation hubs, CC is near government offices. 16 and 24 
-  are near hospitals. PL and CC are "maybe's" due to its proximity to
-  busy buildings. First, we will identify the ones that are essential. 
-
-First, we identify the Exit that stayed busy in 2021 starting from those
-listed above;
-
 data work.Workplace;
     set Ridership_appended;
     if 
@@ -231,22 +244,95 @@ data work.Workplace;
     else if
         Exit="CC" then Essential="1";
     else Essential="0";
-    keep 
+    keep
+        Year 
         Entry
         Exit
         Riders
         Essential;
 run;
 
+
+/* Sort eligible Entry that are Essential by Riders. */
 proc sort
         data=Workplace
-        out=work.temp
+        out=Workplace_essential
+        ;
+    where
+        Essential="1"
+    ;
+    by
+        Year
+        Entry
+    ;
+run;
+
+
+/* In this procedure, we create a table of summary with the sum of essential*/
+proc means
+        data=Workplace_essential
+        nonobs
+        max
+        sum
+        maxdec=0
+    ;
+    class
+        Exit
+    ;
+    var
+        Riders
+    ;
+run;
+
+
+/* Create DATA step for the merged Ridership data set */
+data work.Workplace_merged;
+    set Ridership;
+    if 
+        Exit="16" then Essential="1";
+    else if
+        Exit="24" then Essential="1";
+    else if
+        Exit="EM" then Essential="1";
+    else if
+        Exit="MT" then Essential="1";
+    else if
+        Exit="PL" then Essential="1";
+    else if
+        Exit="CC" then Essential="1";
+    else Essential="0";
+run;
+
+
+/* Sort eligible Entry that are Essential by Riders. */
+proc sort
+        data=Workplace_merged
+        out=Workplace_merged_essential
         ;
     where
         Essential="1"
     ;
     by
         Exit
+    ;
+run;
+
+
+/* Create analysis by Ride2101. Other years are included for comparison. */
+proc means
+        data=Workplace_merged_essential
+        nonobs
+        sum
+        maxdec=0
+    ;
+    class
+        Exit
+    ;
+    var
+        Ride0901
+        Ride1001
+        Ride2001
+        Ride2101
     ;
 run;
 
@@ -266,13 +352,14 @@ and compare the predicted mean to Riders_201001.
 Limitations: We assume of normal distribution and a positively increasing slope 
 between Riders_200901 and Riders_202001. We will likely to choose a selected 
 number of Exit for means comparison. 
-*/
 
-/* 
-In data-analysis, we would add match-merge to horizontally join the tables. 
+Methodology: In data-analysis, we would add match-merge to horizontally join the tables. 
 Then, we can take the sum of Riders based on Exit name to compare the means. 
 Here's the means step for a general overview if there is difference in data
 summary between 2009 and 2010.
+
+Followup Steps: Add inferential analysis steps to check for significance since
+EDA, data processing, and summary are inadequate to draw inferences from.
 */
 /* Total Average Weekday Ridership by Year */
 proc summary
