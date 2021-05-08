@@ -608,7 +608,7 @@ run;
 /*
 Delete unused data files while keeping
 * Ridership_appended to answer Research Questions 1 and 4. ;
-* Ridership_merged to answer Research Questions 2 and 3. ;
+* Ridership to answer Research Questions 2 and 3. ;
 */
 proc datasets
     library=work
