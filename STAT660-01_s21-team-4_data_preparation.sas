@@ -212,7 +212,7 @@ proc sort
         out=Ridership_200901_clean
     ;
     where
-        /* remove rows with missing composite key components */
+        /* remove observations with missing composite key components */
         not(missing(Year))
         and
         not(missing(Month))
@@ -221,8 +221,8 @@ proc sort
         and
         not(missing(Exit))
         and
-        /* remove rows with Riders<1*/
-        not(missing(Riders))
+        /* remove observations when Riders are not a positive numeric value */
+        Riders > 0
     ;
     by 
         Entry
@@ -230,7 +230,7 @@ proc sort
         Riders
 ;
 run;
-   
+
 
 /*
 For Ridership_201001_raw, the columns Year, Month, Entry, and Exit are intended 
@@ -252,7 +252,7 @@ proc sort
         out=Ridership_201001_clean
     ;
     where
-        /* remove rows with missing composite key components */
+        /* remove observations with missing composite key components */
         not(missing(Year))
         and
         not(missing(Month))
@@ -261,8 +261,8 @@ proc sort
         and
         not(missing(Exit))
         and
-        /* remove rows with Riders<1*/
-        not(missing(Riders))
+        /* remove observations when Riders are not a positive numeric value */
+        Riders > 0
     ;
     by 
         Entry
@@ -292,7 +292,7 @@ proc sort
         out=Ridership_202001_clean
     ;
     where
-        /* remove rows with missing composite key components */
+        /* remove observations with missing composite key components */
         not(missing(Year))
         and
         not(missing(Month))
@@ -301,7 +301,7 @@ proc sort
         and
         not(missing(Exit))
         and
-        /* remove rows with missing Riders*/
+        /* remove observations with missing since Riders Type=Char */
         not(missing(Riders))
     ;
     by 
@@ -332,7 +332,7 @@ proc sort
         out=Ridership_202101_clean
     ;
     where
-        /* remove rows with missing composite key components */
+        /* remove observations with missing composite key components */
         not(missing(Year))
         and
         not(missing(Month))
@@ -341,7 +341,7 @@ proc sort
         and
         not(missing(Exit))
         and
-        /* remove rows with missing Riders*/
+        /* remove observations with missing since Riders Type=Char */
         not(missing(Riders))
     ;
     by 
@@ -352,13 +352,15 @@ proc sort
 run;
 
 
-
 /*
 Concatenate Ridership data vertically, combine composite key into a primary key.
 The paired Entry Exit and Month are a primary key since we only evaluate the 
 average weekday ridership in January for any given Year.
 
 RideYYMM is the Ridership average for the corresponding 4-digit Year and Month.
+In doing so, we create new columns Ride0901 that contains non-missing values
+from the column Riders which corresponds to the average the weekday ridership
+in January 2009. 
 */
 data Ridership_200901;
     set 
@@ -376,7 +378,10 @@ data Ridership_200901;
 run;
 
 
-
+/*
+We create new columns Ride1001 that contains non-missing values from the column
+Riders which corresponds to the average the weekday ridership in January 2010. 
+*/
 data Ridership_201001;
     set 
         Ridership_201001_clean;
@@ -393,7 +398,10 @@ data Ridership_201001;
 run;
 
 
-
+/*
+We create new columns Ride1001 that contains non-missing values from the column
+Riders which corresponds to the average the weekday ridership in January 2020. 
+*/
 data Ridership_202001;
     set 
         Ridership_202001_clean;
@@ -410,7 +418,10 @@ data Ridership_202001;
 run;
 
 
-
+/*
+We create new columns Ride1001 that contains non-missing values from the column
+Riders which corresponds to the average the weekday ridership in January 2021. 
+*/
 data Ridership_202101;
     set 
         Ridership_202101_clean;
@@ -427,9 +438,9 @@ data Ridership_202101;
 run;
 
 
-
 /*
-Match-merge tables in DATA Step
+Match-merge tables in DATA Step. This creates the SAS file Ridership_merged
+with the columns Entry, Exit, Ride0901, Ride1001, Ride2001, and Ride2101.
 */
 data Ridership_merged;
     set 
@@ -447,8 +458,21 @@ data Ridership_merged;
 run;
 
 
+/*
+We evaluate the variables and their attributes using CONTENTS procedure before
+proceeding with numeric operations. This procedure confirms confirm that 
+Ride0901 Ride1001 are numeric and Ride2001 Ride2101 are character variables.
+*/
+proc contents
+    data=Ridership_merged;
+run;
 
-/* Add drop and swap for Ride2001 and Ride2101 to restructure numeric values from character values */
+
+/*
+Because we will perform operations with the values from Ride0901, Ride1001,
+Ride2001, and Ride2101, we apply the add-drop-and-swap approach for the columns
+Ride2001 and Ride2101 to restructure the variable into numeric from character.
+*/
 data Ridership(
     drop=
         Ride2001_char
@@ -470,15 +494,22 @@ data Ridership(
 run;
 
 
+/*
+We confirm that the columns that begins with Ride% has a variable Type=Num.
+*/
+proc contents
+    data=Ridership;
+run;
+
 
 /*
-Data-integrity step added to check duplicates.
+Data-integrity step added to remove any observation with missing Ride%.
 */
 data Ridership_dups;
     set Ridership;
     by 
-        Exit
         Entry
+        Exit
     ;
     if
         missing(Ride0901)
@@ -497,6 +528,11 @@ run;
 
 
 /*
+Unlike the match-merge approach, the concatenation of the variable Riders will
+require the variables to have the same Type=Num. Because Riders from
+Ridership_200901_clean and Ridership_201001_clean have the variable Type=Num,
+we proceed with dropping the unusable variable Month since all observations
+evaluated came from January.
 Prepare data sets 2009, 2010 for concatenation
 */
 data Ridership_200901a;
@@ -508,7 +544,9 @@ data Ridership_200901a;
 run;
 
 
-
+/*
+Prepare data set 2010 for concatenation by dropping the unused variable Month.
+*/
 data Ridership_201001a;
     set 
         Ridership_201001_clean;
@@ -516,7 +554,6 @@ data Ridership_201001a;
         Month
     ;
 run;
-
 
 
 /*
@@ -538,9 +575,8 @@ data Ridership_202001_int(
 run;
 
 
-
 /*
-Prepare data set 2020 for concatenation
+Prepare data set 2020 for concatenation by dropping the unused variable Month.
 */
 data Ridership_202001a;
     set 
@@ -549,7 +585,6 @@ data Ridership_202001a;
         Month
     ;
 run;
-
 
 
 /*
@@ -573,7 +608,7 @@ run;
 
 
 /*
-Prepare data set 2021 for concatenation
+Prepare data set 2021 for concatenation by dropping the unused variable Month.
 */
 data Ridership_202101a;
     set 
@@ -584,7 +619,9 @@ data Ridership_202101a;
 run;
 
 
-
+/*
+Create Ridership_appended that contains the concatenation 4 data files.
+*/
 data Ridership_appended;
     set
         Ridership_200901a
@@ -594,18 +631,11 @@ data Ridership_appended;
     ;
 run;
 
-
-
 /*
-Data-integrity step to remove missing
+Data-integrity step to remove observations with any missing Riders.
 */
 data Ridership_appended_missing;
     set Ridership_appended;
-    by
-        Year
-        Exit
-        Entry
-    ;
     if
         missing(Riders)
     then
@@ -615,9 +645,9 @@ data Ridership_appended_missing;
 run;
 
 
-
 /*
-Delete unused data sets
+Delete unused data sets.
+
 */
 proc datasets
     library=work
