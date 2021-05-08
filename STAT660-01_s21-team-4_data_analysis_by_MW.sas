@@ -52,7 +52,7 @@ run;
 title;
 
 
-/* Sort the highest Ridership value */
+/* Sort the highest Ridership value for Entry */
 proc sort
         data=SummaryOutput_Entry
         out=SummarySort_Entry
@@ -78,7 +78,7 @@ run;
 title;
 
 
-title  "Summary of Appended Tables classified by Entry";
+/* Summary of the combined ridership for Exit from Ridership_appended */
 proc summary
         data=Ridership_appended(
             where=(not(missing(Exit)))
@@ -95,10 +95,9 @@ proc summary
         sum=
     ;
 run;
-title;
 
 
-/* Sort the highest Ridership value */
+/* Sort the highest Ridership value for Exit */
 proc sort
         data=SummaryOutput_Exit
         out=SummarySort_Exit
