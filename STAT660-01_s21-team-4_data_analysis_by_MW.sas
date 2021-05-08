@@ -31,6 +31,15 @@ largest values.
 Limitations: How to find the max(5) values for the paired entry and exit? 
 Perhaps we need to combine the total entry and total exit to answer, or if not
 we will need to refine what constitutes of being the "busiest" station.
+
+Methodology: Use the SUMMARY procedure to classify by Entry and the SUM clause
+is added to combine the Riders from Year=2009, 2010, 2020, and 2021. We notice
+that the SUMMARY procedure also creates a missing Entry at the last row which
+represents the column total. The SORT procedure assembles the Riders in
+descending order for non-missing Entry.
+
+Followup Steps: Relabel the column sum appropriately so that it is not 
+mistakenly used as an observation. Separate Ridership total by Year for Entry.
 */
 title  "Summary of Appended Tables classified by Entry";
 proc summary
