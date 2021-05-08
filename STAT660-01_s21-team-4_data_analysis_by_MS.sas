@@ -46,8 +46,17 @@ residential and suburban areas.';
 Limitations: There are no missing values or values that are zero in exit and entry
 columns.
 
-Methodolgy: Compare Columns Entry, 2009_01 and 2010_01 from Ridership_merged dataset 
-using proc means.
+Methodolgy:Compare Columns Entry, 2009_01 and 2010_01 from Ridership_merged dataset 
+using proc means. This will give an output for the means of the two years per station.
+Using proc corr and proc sgplot,the results can be visualized.By looking at the mean 
+values, it is possible to compare entries for each station. To look for the stations 
+with the highest difference between riders, it is useful to look at the sgplot.
+Although the percentage increase stayed  somewhat stable for these two years,MacArthur 
+station such showed a more visible increase in 2010 compared to 2009.
+ 
+Followup Steps: Further analysis such as modeling and regression could be done if data 
+has more covariates such as average age of riders per area, breakdown by Male or Female,
+etc. to study the usefuleness of bart to different populations. 
 
 Notes: This analyzes the two columns of entries and exits to see which has the 
 highest count. 
@@ -71,6 +80,14 @@ proc means
 run;
 title;
 footnote;
+
+/*data visualization to study question number one */
+title "Plot of Riders in 2009 vs 2010";
+Proc sgplot data=Ridership_merged_output1;
+  hbox Ride0901 /category=Entry;
+  hbox Ride1001 /category= Entry; 
+  ;
+run;
 
 *******************************************************************************;
 * Research Question 2 Analysis Starting Point;
@@ -101,7 +118,12 @@ Limitations: There are no missing values or values that are zero in exit and ent
 columns.
 
 Methodolgy: Compare Columns Entry, 2020_01 and 2021_01 from Ridership_merged dataset 
-using proc means.
+using proc means. To look at the changes, using proc sgplot can help us visualize
+the difference. proc sgplot supports result from procmeans. 
+
+Followup Steps: Since this was a peculiar time, further analysis can be done per station.
+For example, areas showing the highest changes can be looked at further, given additional
+information on riders.
 
 Notes: This analyzes the two columns of entries and exits to see which has the 
 highest count. 
@@ -134,6 +156,15 @@ proc means
 run;
 title;
 footnote;
+
+/*data visualization to study question number two */
+title "Plot of Riders in 2020 vs 2021";
+Proc sgplot data=Ridership_merged_output2;
+  hbox Ride_2001 /category=Entry;
+  hbox Ride_2101 /category= Entry; 
+  ;
+run;
+
 
 *******************************************************************************;
 * Research Question 3 Analysis Starting Point;
@@ -184,13 +215,7 @@ run;
 proc print data=correlation_output;proc print;run;
 title;
 
-/*data visualization to study question number one */
-title "Plot of Riders in 2009 vs 2010";
-Proc sgplot data=Ridership_merged_output1;
-  hbox Ride0901 /category=Entry;
-  hbox Ride1001 /category= Entry; 
-  ;
-run;
+
 
 
 
