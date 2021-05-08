@@ -614,7 +614,7 @@ proc datasets
     library=work
     ;
     save
-        Ridership_merged
+        Ridership
         Ridership_appended
     ;
 run;
