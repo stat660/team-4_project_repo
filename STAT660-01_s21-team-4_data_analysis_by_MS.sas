@@ -56,7 +56,7 @@ footnote4 justify=left
 'The result and the assumption makes sense since Concord and Glen Park are largely residential and suburban areas.';
 
 proc means 
-    data=Ridership_merged 
+    data=Ridership
     maxdec=1
     missing
     n /* number of observations */
@@ -69,19 +69,20 @@ proc means
     var 
       Ride0901 Ride1001 
   ;
-    output out=Ridership_merged_output1;
+    output out=Ridership_output1;
 run;
 title;
 footnote;
 
 /*data visualization to study question number one */
 title "Plot of Riders in 2009 vs 2010";
-Proc sgplot data=Ridership_merged_output1;
+proc sgplot data=Ridership_output1;
     hbox Ride0901 /category=Entry;
     hbox Ride1001 /category=Entry; 
   ;
 run;
 title;
+
 *******************************************************************************;
 * Research Question 2 Analysis Starting Point;
 *******************************************************************************;
@@ -116,16 +117,8 @@ footnote2 justify=left
 footnote3 justify=left
 'Result reflect stay at home, work from home and quarantine interventions with the advent of COVID-19.';
 
-/* change two character columns to numeric*/
-data testing;
-    set Ridership_merged;
-    Ride_2001=input(Ride2001,8.);
-    Ride_2101=input(Ride2101,8.);
-    drop Ride2001 Ride2101;
-run;
-
 proc means 
-    data=testing
+    data=Ridership
     maxdec=1
     missing
     n /* number of observations */
@@ -136,18 +129,18 @@ proc means
     class
       Entry;
     var 
-      Ride_2001 Ride_2101 
+      Ride2001 Ride2101 
   ;
-    output out=Ridership_merged_output2;
+    output out=Ridership_output2;
 run;
 title;
 footnote;
 
 /*data visualization to study question number two */
-title "Plot of Riders in 2020 vs 2021";
-Proc sgplot data=Ridership_merged_output2;
-    hbox Ride_2001 /category=Entry;
-    hbox Ride_2101 /category=Entry; 
+title "Comparison of Riders in 2020 vs 2021";
+proc sgplot data=Ridership_output2;
+    hbox Ride2001 /category=Entry;
+    hbox Ride2101 /category=Entry; 
   ;
 run;
 title;
@@ -161,11 +154,14 @@ Limitation: Any values that are missing or duplicates should be excluded from
 data analysis.
 
 Methodology: Using proc freq, we can compare the trend in the four columns. Using
-proc corr, we can study the relationship amongst the four years. 
+proc corr, we can study the relationship amongst the four years. Each of the years
+are seen as an independent variable.  
 
 Followups Steps: Output shows that the frequency procedure is not ideal for
-multiple categories dataset. 
+multiple categories dataset. Further analysis can be done using time series analysis
+to get a more vivid picture of the trend.
 
+Notes: This looks at the correlation amongst the four columns. 
 */
 title1 justify=left
 'Question 3 of 3: Can the Exit station with the highest number of riders in 2009 be used to predict the following year trend?';
@@ -181,23 +177,22 @@ footnote2 justify=left
 
 /* studying frequency of exits from merged dataset */
 proc freq
-    data= testing;
+    data= Ridership;
     table Exit/ missing out=Exit_frequency09;
-    by variable;
-run;
-proc print;run;
-
-proc freq
-    data= testing;
-    table Exit*Ride1001/ missing out=Exit_frequency10;
 run;
 proc print;run;
 title;
 footnote;
 
+proc freq
+    data= Ridership;
+    table Exit*Ride1001/ missing out=Exit_frequency10;
+run;
+proc print;run;
+
 /*correlation coefficient to look at trend amongst the four years*/
-title "Testing Ridership Correlation throughout the years";
-proc corr data= testing outp=correlation_output;
+title "Ridership Correlation of Four Years";
+proc corr data= Ridership outp=correlation_output;
 run;
 proc print data=correlation_output;proc print;run;
 title;
