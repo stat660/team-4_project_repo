@@ -603,18 +603,3 @@ data Ridership_appended_missing;
             output;
         end;
 run;
-
-
-/*
-Delete unused data files while keeping
-* Ridership_appended to answer Research Questions 1 and 4. ;
-* Ridership to answer Research Questions 2 and 3. ;
-*/
-proc datasets
-    library=work
-    ;
-    save
-        Ridership
-        Ridership_appended
-    ;
-run;
