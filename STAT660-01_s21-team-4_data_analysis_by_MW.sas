@@ -65,26 +65,27 @@ proc sort
 run;
 
 
+/* Create titles and footnotes */
 title1 justify=left
-'Question 1 of 4: Which five stations are the busiest in January 2009, 2010, 
-2020, and 2021?'
+"Question 1 of 4: Which five stations are the busiest in January 2009, 2010, 2020, and 2021?"
 ;
 
 title2 justify=left
-'Rationale: We are interested in the data exploration process.'
+"Rationale: We are interested in the data exploration process."
 ;
 
-title3 justify=left
-'5 Most Utilized Entry with Most Ridership in Combined Years'
+title3 justify=center
+"5 Entry with The Most Combined Ridership"
 ;
 
 footnote1 justify=left
-'5 Most Utilized Entry with the highest weekday average ridership from combined years (2009, 2010, 2020, and 2021) are MT, EM, PL, CC, and 12.'
+"5 Most Utilized Entry with the highest weekday average ridership from combined years (2009, 2010, 2020, and 2021) are MT, EM, PL, CC, and 12."
 ;
 
 footnote2 justify=left
-'This tells use about the busiest BART stations by their Entry according to the sum of average weekday ridership in January for the combined years (2009, 2010, 2020, and 2021).'
+"This tells use about the busiest BART stations by their Entry according to the sum of average weekday ridership in January for the combined years (2009, 2010, 2020, and 2021)."
 ;
+
 
 proc print
         data=SummarySort_Entry(obs=5)
@@ -130,19 +131,19 @@ run;
 
 
 title4 justify=left
-'5 Most Utilized Exit with Most Ridership in Combined Years'
+"5 Most Utilized Exit with Most Ridership in Combined Years"
 ;
 
 footnote3 justify=left
-'5 Most Utilized Exit with the highest weekday average ridership from combined years (2009, 2010, 2020, and 2021) are EM, MT, PL, CC, and RR.'
+"5 Most Utilized Exit with the highest weekday average ridership from combined years (2009, 2010, 2020, and 2021) are EM, MT, PL, CC, and RR."
 ;
 
 footnote4 justify=left
-'This tells use about the busiest BART stations by their Exit according to the sum of average weekday ridership in January for the combined years (2009, 2010, 2020, and 2021).'
+"This tells use about the busiest BART stations by their Exit according to the sum of average weekday ridership in January for the combined years (2009, 2010, 2020, and 2021)."
 ;
 
 footnote5 justify=left
-'In both Entry and Exit, MT, EM, PL, and CC are both present but they appear in different orders. The 5th Entry and Exit are unique. Further analysis will be necessary to make inferences and find explanation for the difference in order and list.'
+"In both Entry and Exit, MT, EM, PL, and CC are both present but they appear in different orders. The 5th Entry and Exit are unique. Further analysis will be necessary to make inferences and find explanation for the difference in order and list."
 ;
 
 
@@ -174,11 +175,9 @@ Limitations: We assume that the library data from the BART is accurate and
 unchanged. Thus, we confirm with other sources about which stations are located
 in the San Francisco's Financial District to create a variable for validation.
 
-Methodology: By Google Maps and the City Supervisory Map (cited on 04/22/2021), 
-https://sfplanninggis.org/sffind/
-, Exit=EM MT are identified to be in the Financial District, Region="SF_Dist3".
-Use DATA step to create and assign Region="SF_Dist3" for Exit=EM MT, otherwise
-empty (Region=" "). Use SORT procedure assembles the Riders in descending order.
+Methodology: Use DATA step to create and assign Region="SF_Dist3" for Exit=EM MT
+, otherwise empty (Region=" "). Use SORT procedure assembles the Riders in
+descending order.
 
 Followup Steps: Filter Riders by Entry to know the corresponding Entry with most
 Riders for the eligible Exit located in the San Francisco's Financial District.
@@ -208,26 +207,26 @@ data Region;
 run;
 
 
+/* Create titles and footnotes */
 title1 justify=left
-"Question 2 of 4: Which three Entry stations do riders who exit in the San 
-Francisco's Financial District commute from?"
+"Question 2 of 4: Which three Entry stations do riders who exit in the San Francisco's Financial District commute from?"
 ;
 
 title2 justify=left
-"Rationale: Of the top Exit stations in San Francisco, we identify the Entry 
-stations with the largest values. This may point out where San Francisco 
-workers commute from."
+"Rationale: Of the top Exit stations in San Francisco, we identify the Entry stations with the largest values. This may point out where San Francisco workers commute from."
 ;
 
-title4 justify=left
+title3 justify=center
 "Exit in the Financial District."
 ;
 
 footnote1 justify=left
-'This table shows the first 20 observations of ridership observed of Exit that
-are located in the Financial District from Year 2009, 2010, 2020, and 2021.'
+"This table shows the first 3 observations of ridership observed of Exit that are located in the Financial District from Year 2009, 2010, 2020, and 2021."
 ;
 
+footnote2 justify=left
+"Exit=EM MT are identified to be in the Financial District, Region="SF_Dist3". Confirmed with Google Maps and the City Supervisory Map <https://sfplanninggis.org/sffind/> (cited on 04/22/2021)."
+;
 
 /* Sort eligible Exit in specified Region by Riders. */
 proc sort
@@ -247,7 +246,7 @@ run;
 
 
 proc print
-        data=SF_Dist3(obs=20)
+        data=SF_Dist3(obs=3)
     ;
 run;
 
@@ -318,6 +317,7 @@ proc sort
 run;
 
 
+/* Create titles and footnotes */
 title1 justify=left
 "Question 3 of 4: Where do essential workers work?"
 ;
@@ -393,7 +393,7 @@ run;
 
 
 title4 justify=left
-"Sum of Ridership for Essential Exits".
+"Sum of Ridership for Essential Exits."
 ;
 
 footnote3 justify=left
@@ -473,6 +473,7 @@ proc summary
 run;
 
 
+/* Create titles and footnotes */
 title1 justify=left
 "Question 4 of 4: Was there a statistically significant decline in ridership 
 during the H1N1 outbreak in 2010?"
