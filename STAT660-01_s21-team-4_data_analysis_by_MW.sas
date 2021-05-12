@@ -16,6 +16,17 @@ answer the research questions below
 %include "&path.STAT660-01_s21-team-4_data_preparation.sas";
 
 
+/* Keep only 2 files used for analysis */
+proc datasets
+    library=work
+	nolist
+    ;
+    save
+        Ridership
+        Ridership_appended
+    ;
+run;
+
 *******************************************************************************;
 * Research Question 1 Analysis Starting Point;
 *******************************************************************************;
@@ -75,15 +86,11 @@ title2 justify=left
 ;
 
 title3 justify=center
-"5 Entry with The Most Combined Ridership"
+"5 Busiest Entry Stations"
 ;
 
 footnote1 justify=left
-"5 Most Utilized Entry with the highest weekday average ridership from combined years (2009, 2010, 2020, and 2021) are MT, EM, PL, CC, and 12."
-;
-
-footnote2 justify=left
-"This tells use about the busiest BART stations by their Entry according to the sum of average weekday ridership in January for the combined years (2009, 2010, 2020, and 2021)."
+"MT, EM, PL, CC, and 12 are Entry stations with the highest sum of average weekday ridership from January 2009, 2010, 2020, and 2021."
 ;
 
 
@@ -130,20 +137,16 @@ proc sort
 run;
 
 
-title4 justify=left
-"5 Most Utilized Exit with Most Ridership in Combined Years"
+title4 justify=center
+"5 Busiest Exit Stations"
+;
+
+footnote2 justify=left
+"EM, MT, PL, CC, and RR are Exit stations with the highest sum of average weekday ridership from January 2009, 2010, 2020, and 2021."
 ;
 
 footnote3 justify=left
-"5 Most Utilized Exit with the highest weekday average ridership from combined years (2009, 2010, 2020, and 2021) are EM, MT, PL, CC, and RR."
-;
-
-footnote4 justify=left
-"This tells use about the busiest BART stations by their Exit according to the sum of average weekday ridership in January for the combined years (2009, 2010, 2020, and 2021)."
-;
-
-footnote5 justify=left
-"In both Entry and Exit, MT, EM, PL, and CC are both present but they appear in different orders. The 5th Entry and Exit are unique. Further analysis will be necessary to make inferences and find explanation for the difference in order and list."
+"The stations MT, EM, PL, and CC appear to be the busiest Entry and Exit stations in different orders. From the tables, the 5th Entry and Exit stations are unique. This suggests that further analysis will be necessary to make inferences and find explanation for the difference in the list and order."
 ;
 
 
