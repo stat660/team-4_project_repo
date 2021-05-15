@@ -19,7 +19,7 @@ answer the research questions below
 /* Keep only 2 files used for analysis */
 proc datasets
     library=work
-	nolist
+    nolist
     ;
     save
         Ridership
@@ -76,6 +76,29 @@ proc sort
 run;
 
 
+/* Added comma between hundred and thousand */
+options validvarname=any
+;
+
+data SummarySort_Entry_comma(
+    );
+    drop
+        _TYPE_
+        _FREQ_
+        Year
+    ;
+    set SummarySort_Entry(
+/*        rename=(*/
+/*            Riders="Weekday Ridership"*/
+/*            Entry="Entry Stations"*/
+/*        )*/
+    );
+    format
+        Riders comma8.
+    ;
+run;
+
+
 /* Create titles and footnotes */
 title1 justify=left
 "Question 1 of 4: Which five stations are the busiest in January 2009, 2010, 2020, and 2021?"
@@ -95,7 +118,7 @@ footnote1 justify=left
 
 
 proc print
-        data=SummarySort_Entry(obs=5)
+        data=SummarySort_Entry_comma(obs=5)
     ;
     id
         Entry
@@ -103,8 +126,12 @@ proc print
     var
         Riders
     ;
-
 run;
+
+
+/* Clear titles/footnotes */
+title;
+footnote;
 
 
 /* Summary of the combined ridership for Exit from Ridership_appended */
@@ -137,18 +164,23 @@ proc sort
 run;
 
 
-title4 justify=center
+title1 justify=center
 "5 Busiest Exit Stations"
 ;
 
-footnote2 justify=left
+footnote1 justify=left
 "EM, MT, PL, CC, and RR are Exit stations with the highest sum of average weekday ridership from January 2009, 2010, 2020, and 2021."
 ;
 
-footnote3 justify=left
+footnote2 justify=left
 "The stations MT, EM, PL, and CC appear to be the busiest Entry and Exit stations in different orders. From the tables, the 5th Entry and Exit stations are unique. This suggests that further analysis will be necessary to make inferences and find explanation for the difference in the list and order."
 ;
 
+
+data SummarySort_Exit;
+    put @10 Riders best12.;
+
+;
 
 proc print
         data=SummarySort_Exit(obs=5)
