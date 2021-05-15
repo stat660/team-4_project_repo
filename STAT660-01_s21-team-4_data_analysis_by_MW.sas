@@ -16,17 +16,6 @@ answer the research questions below
 %include "&path.STAT660-01_s21-team-4_data_preparation.sas";
 
 
-/* Keep only 2 files used for analysis */
-proc datasets
-    library=work
-    nolist
-    ;
-    save
-        Ridership
-        Ridership_appended
-    ;
-run;
-
 *******************************************************************************;
 * Research Question 1 Analysis Starting Point;
 *******************************************************************************;
