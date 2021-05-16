@@ -241,7 +241,7 @@ title2 justify=left
 ;
 
 title3 justify=center
-"Exit in the Financial District."
+"Ridership at stations in SF Financial District"
 ;
 
 footnote1 justify=left
@@ -347,22 +347,19 @@ title1 justify=left
 ;
 
 title2 justify=left
-"Rationale: This would help inform whether essential workers are concentrated in
-certain areas of living and work."
+"Rationale: This would help inform whether essential workers are concentrated in certain areas of living and work."
 ;
 
-title3 justify=left
+title3 justify=center
 "Table of summary with the sum of Ridership by Exits that are essential."
 ;
 
 footnote1 justify=left
-"We identify that Exit=EM MT PL CC 16 24 in 2021 are near essential businesses
-such as transportation hubs, medical centers, and government offices."
+"We identify that Exit=EM MT PL CC 16 24 in 2021 are near essential businesses such as transportation hubs, medical centers, and government offices."
 ;
 
 footnote2 justify=left
-"The maximum Ridership for any paired Entry and Exit in 2021. Also, the sum of 
-Ridership of any Entry for the essential Exit in 2021."
+"The maximum Ridership for any paired Entry and Exit in 2021. Also, the sum of Ridership of any Entry for the essential Exit in 2021."
 ;
 
 
@@ -381,6 +378,11 @@ proc means
         Riders
     ;
 run;
+
+
+/* Clear titles/footnotes */
+title;
+footnote;
 
 
 /* Create DATA step for the merged Ridership data set */
@@ -416,25 +418,20 @@ proc sort
 run;
 
 
-title4 justify=left
+title1 justify=center
 "Sum of Ridership for Essential Exits."
 ;
 
+footnote1 justify=left
+"The maximum Ridership for any paired Entry and Exit in 2021. Also, the sum of Ridership of any Entry for the essential Exit in 2021."
+;
+
+footnote2 justify=left
+"We identify that Exit=EM MT PL CC 16 24 in 2021 are near essential businesses such as transportation hubs, medical centers, and government offices."
+;
+
 footnote3 justify=left
-"The maximum Ridership for any paired Entry and Exit in 2021. Also, the sum of 
-Ridership of any Entry for the essential Exit in 2021."
-;
-
-footnote4 justify=left
-"We identify that Exit=EM MT PL CC 16 24 in 2021 are near essential businesses
-such as transportation hubs, medical centers, and government offices."
-;
-
-footnote5 justify=left
-"Summary table for the sum of weekday average ridership for Exits that are
-essential in January 2021 (Ride2101). The sum of weekday average ridership from
-January 2009 (Ride2009) , January 2010 (Ride1001), and January 2020 (Ride2001)
-are added for comparison."
+"Summary table for the sum of weekday average ridership for Exits that are essential in January 2021 (Ride2101). The sum of weekday average ridership from January 2009 (Ride2009) , January 2010 (Ride1001), and January 2020 (Ride2001) are added for comparison."
 ;
 
 /* Create analysis by Ride2101. Other years are included for comparison. */
@@ -499,8 +496,7 @@ run;
 
 /* Create titles and footnotes */
 title1 justify=left
-"Question 4 of 4: Was there a statistically significant decline in ridership 
-during the H1N1 outbreak in 2010?"
+"Question 4 of 4: Was there a statistically significant decline in ridership during the H1N1 outbreak in 2010?"
 ;
 
 title2 justify=left
@@ -512,20 +508,20 @@ title3 justify=left
 ;
 
 footnote2 justify=left
-"Sum of average weekday ridership observed in January 2009, 2010, 2020, and 
-2021."
+"Sum of average weekday ridership observed in January 2009, 2010, 2020, and 2021."
 ;
 
 footnote2 justify=left
-"From the column-wise total we notice a decline in the average weekday ridership
-in 2010 from 2009 if we assumed that the Ridership growth rate between 2009-2020
-is nonnegative. Further analysis needed since this table summary is inadequate
-to test for statistical significance."
+"From the column-wise total we notice a decline in the average weekday ridership in 2010 from 2009 if we assumed that the Ridership growth rate between 2009-2020 is nonnegative. Further analysis needed since this table summary is inadequate to test for statistical significance."
 ;
 
 
 proc print
-        data=TotalByYear
+        data=TotalByYear(
+            drop=
+                _Type_
+                _Freq_
+            )
         noobs
     ;
 run;
